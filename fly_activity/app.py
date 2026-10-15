@@ -19,7 +19,7 @@ from analyze_flies import DEFAULTS,validate_config
 from video_setup import prepare_video,roi_mask
 from results_view import ResultsView,load_results
 from cumulative_learning import STORE,active_model_path
-from progress import StackedProgress,STAGES,PREFIX
+from progress import StackedProgress,STAGES,PREFIX,startup_sync_status
 from slot_selection import parse_excluded_slots
 
 HERE=Path(__file__).resolve().parent
@@ -100,6 +100,7 @@ class App:
         footer.pack(fill="x",before=self.tabs)
         footer.pack_configure(side="bottom")
         self.progress=StackedProgress(footer);self.progress.pack(fill="x")
+        ttk.Label(footer,text=startup_sync_status(),wraplength=990).pack(anchor='w')
         ttk.Label(footer,textvariable=self.status,wraplength=990).pack(anchor="w",pady=(5,0))
         ttk.Label(main,text="自動頭尾判定は外見モデルの推定です。人手評価は自動ラベルを隠して行い、元の判定を変更しません。\n"
                             "頭側入力と人手評価を累積学習します。モデルを履歴保存し、以前の解析結果は固定します。",

@@ -1,5 +1,7 @@
 """Stage progress shared by the analysis worker and the desktop display."""
 import tkinter as tk
+import json
+from pathlib import Path
 from tkinter import ttk
 
 from progress_protocol import PREFIX
@@ -11,6 +13,14 @@ STAGES = (
     ("preview", "確認動画", 12, "#9b609c"),
     ("load", "結果表示", 5, "#538544"),
 )
+
+
+def startup_sync_status():
+    try:
+        record=json.loads((Path(__file__).resolve().parent.parent/'.runtime/update_status.json').read_text(encoding='utf-8'))
+        if record.get('uploaded'):return 'GitHub同期：完了（前回までの保存データを送信済み）'
+        return 'GitHub同期：'+record.get('detail','送信状態不明').splitlines()[0][:220]
+    except (OSError,ValueError,IndexError):return 'GitHub同期：状態未確認'
 
 
 

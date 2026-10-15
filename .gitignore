@@ -1,12 +1,7 @@
 .venv/
 
-# Generated analysis results (learning history is shared through GitHub)
-/fly_activity/outputs/
-/fly_activity/results_*/
-/fly_activity/run_*/
-/fly_activity/direction_confirmed_*/
-/fly_activity/direction_fixed_*/
-/fly_activity/direction_reanalysis_*/
+# Results, annotations and learning history are shared; feature caches stay local.
+/fly_activity/**/*.npz
 /fly_activity/learning/*.npz
 /fly_activity/learning/migration.json
 /fly_activity/learning/*-wal
@@ -28,6 +23,10 @@
 *.bmp
 *.webp
 *.gif
+!/fly_activity/**/report.png
+!/fly_activity/**/direction_report.png
+!/fly_activity/**/movement_rate.png
+!/fly_activity/**/manual_behavior.png
 .DS_Store
 Thumbs.db
 __pycache__/

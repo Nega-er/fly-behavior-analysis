@@ -224,7 +224,8 @@ class LearningStore:
                                (record["key"],json.dumps(record,ensure_ascii=False),record["human_label"],now))
             records=[json.loads(r[0]) for r in connection.execute("SELECT payload FROM examples ORDER BY key")]
             model=fit_head(seed,records)
-            version=(connection.execute("SELECT MAX(version) FROM versions").fetchone()[0] or 0)+1
+            version=max(connection.execute("SELECT MAX(version) FROM versions").fetchone()[0] or 0,
+                        max((int(p.stem.split('_')[-1]) for p in (self.folder/'models').glob('model_*.json') if p.stem.split('_')[-1].isdigit()),default=0))+1
             name=f'models/model_{version:06d}.json'
             model.update(learning_version=version,created_utc=now,
                          cumulative_labels=len(records),behavior_training_samples=len(model["behavior_memory"]),
@@ -235,6 +236,25 @@ class LearningStore:
         # the process exits between committing and publishing this cache.
         active_model_path(self.folder)
         return dict(status=record["extraction_status"],version=version,learned=record.get("behavior") is not None)
+
+    def import_history(self,source):
+        """Union teachers from an archived PC history; preserve corrections as revisions."""
+        with closing(sqlite3.connect(Path(source).resolve().as_uri()+'?mode=ro',uri=True)) as remote:
+            incoming=remote.execute('SELECT key,payload,label,updated FROM examples ORDER BY key').fetchall()
+        changed=0
+        for key,payload,label,updated in incoming:
+            with closing(self.connect()) as local:
+                previous=local.execute('SELECT label,updated FROM examples WHERE key=?',(key,)).fetchone()
+            if previous and previous[0]==label:continue
+            if previous and previous[1]>=updated:
+                with closing(self.connect()) as local,local:
+                    if not local.execute('SELECT 1 FROM revisions WHERE key=? AND previous_payload=?',(key,payload)).fetchone():
+                        local.execute('INSERT INTO revisions(key,previous_payload,created) VALUES (?,?,?)',(key,payload,updated))
+                continue
+            self.update(json.loads(payload));changed+=1
+            with closing(self.connect()) as local,local:
+                local.execute('UPDATE examples SET updated=? WHERE key=?',(updated,key))
+        return changed
 
 
 class TeacherExtractor:

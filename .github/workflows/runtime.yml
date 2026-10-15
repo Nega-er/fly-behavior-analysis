@@ -7,6 +7,11 @@ on:
       - 'launch.py'
       - 'test_launch.py'
       - 'test_updater.py'
+      - 'test_data_sync.py'
+      - '.gitignore'
+      - '.gitattributes'
+      - 'fly_activity/cumulative_learning.py'
+      - 'fly_activity/test_cumulative.py'
       - 'fly_activity/manual_behavior*.py'
       - 'fly_activity/test_manual_behavior*.py'
       - 'fly_activity/app.py'
@@ -41,7 +46,8 @@ jobs:
           /bin/zsh -f setup/mac.sh --app check
           /bin/zsh -f setup/mac.sh --app manual --smoke-test
           /bin/zsh -f setup/mac.sh --app analysis --smoke-test
-          .runtime/venvs/python-*/bin/python -m unittest test_launch test_updater -v
+          .runtime/venvs/python-*/bin/python -m unittest test_launch test_updater test_data_sync -v
+          .runtime/venvs/python-*/bin/python -m unittest discover -s fly_activity -p test_cumulative.py -v
           .runtime/venvs/python-*/bin/python -m unittest discover -s fly_activity -p 'test_manual_behavior*.py' -v
           .runtime/venvs/python-*/bin/python -m unittest discover -s fly_activity -p test_slot_exclusion.py -v
       - name: Windows setup, Conda isolation and GUI
@@ -57,7 +63,9 @@ jobs:
           & ./setup/windows.ps1 -App manual -AppArguments @('--smoke-test')
           & ./setup/windows.ps1 -App analysis -AppArguments @('--smoke-test')
           $Python = (Get-ChildItem .runtime/venvs/*/Scripts/python.exe | Select-Object -First 1).FullName
-          & $Python -m unittest test_launch test_updater -v
+          & $Python -m unittest test_launch test_updater test_data_sync -v
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          & $Python -m unittest discover -s fly_activity -p test_cumulative.py -v
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           & $Python -m unittest discover -s fly_activity -p 'test_manual_behavior*.py' -v
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

@@ -3,3 +3,9 @@
 *.command text eol=lf
 *.bat text eol=crlf
 *.sqlite3 binary
+
+# Preserve both versions of structured learning/session data on concurrent edits.
+fly_activity/learning/**/*.json -merge
+fly_activity/learning/*.json -merge
+fly_activity/**/session.json -merge
+fly_activity/**/*.csv -merge

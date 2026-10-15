@@ -19,6 +19,22 @@ HERE=Path(__file__).parent
 
 
 class CumulativeTests(unittest.TestCase):
+    def test_import_other_pc_teachers_preserves_history_and_does_not_overwrite_models(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);local=root/'local';remote=root/'remote';local.mkdir();remote.mkdir()
+            learner,seed=self.make_store(local);other,_=self.make_store(remote)
+            learner.update(self.record(seed));first=active_model_path(local);original=first.read_bytes()
+            other.update(dict(self.record(seed),key='other-pc'))
+            # Another PC may already own the next numeric model filename.
+            (local/'models/model_000002.json').write_text('retained remote model')
+            self.assertEqual(learner.import_history(other.db),1)
+            self.assertEqual(learner.import_history(other.db),0)
+            self.assertEqual(first.read_bytes(),original)
+            self.assertEqual((local/'models/model_000002.json').read_text(),'retained remote model')
+            model=load_model(active_model_path(local));self.assertEqual(model['learning_version'],3)
+            self.assertEqual(model['cumulative_labels'],2)
+            with sqlite3.connect(other.db) as db:self.assertEqual(db.execute('SELECT count(*) FROM examples').fetchone()[0],1)
+
     def make_store(self,path):
         shutil.copyfile(HERE/"learning"/"seed_model.json",path/"seed_model.json")
         return LearningStore(path),load_model(path/"seed_model.json")

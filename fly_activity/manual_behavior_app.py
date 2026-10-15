@@ -17,7 +17,7 @@ from tk_images import photo_image
 from analyze_flies import DEFAULTS,validate_config,track_video
 from video_setup import prepare_video
 from manual_behavior import ManualSession,BEHAVIORS,behavior_figure
-from progress import StackedProgress,STAGES
+from progress import StackedProgress,STAGES,startup_sync_status
 
 HERE=Path(__file__).resolve().parent
 MANUAL_STAGES=(STAGES[0],STAGES[1],STAGES[-1])
@@ -52,6 +52,7 @@ class ManualApp:
         ttk.Label(top,textvariable=self.source_text,wraplength=1100).grid(row=3,column=0,columnspan=8,sticky='w',pady=4)
         footer=ttk.Frame(root,padding=(10,5));footer.pack(side='bottom',fill='x')
         self.progress=StackedProgress(footer);self.progress.begin(MANUAL_STAGES);self.progress.pack(fill='x')
+        ttk.Label(footer,text=startup_sync_status(),wraplength=1100).pack(anchor='w')
         ttk.Label(footer,textvariable=self.status,wraplength=1100).pack(anchor='w')
         self.tabs=ttk.Notebook(root);self.tabs.pack(fill='both',expand=True,padx=10)
         editor=ttk.Frame(self.tabs);self.graph_tab=ttk.Frame(self.tabs)
