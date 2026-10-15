@@ -1,0 +1,77 @@
+{
+  "completed_samples": 0,
+  "scorable_samples": 0,
+  "unscorable_samples": 0,
+  "accuracy_including_unknown_as_error": null,
+  "prediction_coverage": null,
+  "accuracy_on_classified_samples": null,
+  "macro_f1_present_reference_classes": null,
+  "classes": {
+    "forward": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "reference_samples": 0
+    },
+    "backward": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "reference_samples": 0
+    },
+    "stopped": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "reference_samples": 0
+    },
+    "lateral": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "reference_samples": 0
+    }
+  },
+  "confusion_matrix": {
+    "forward": {
+      "forward": 0,
+      "backward": 0,
+      "stopped": 0,
+      "lateral": 0,
+      "unknown": 0
+    },
+    "backward": {
+      "forward": 0,
+      "backward": 0,
+      "stopped": 0,
+      "lateral": 0,
+      "unknown": 0
+    },
+    "stopped": {
+      "forward": 0,
+      "backward": 0,
+      "stopped": 0,
+      "lateral": 0,
+      "unknown": 0
+    },
+    "lateral": {
+      "forward": 0,
+      "backward": 0,
+      "stopped": 0,
+      "lateral": 0,
+      "unknown": 0
+    }
+  },
+  "note": "Unknown predictions count as errors for scorable human labels. Unidentifiable target animals are unscorable, so this is not an independent detection/identity accuracy test. Nearby video samples are correlated; sample counts are not independent experimental replicates.",
+  "provenance": {
+    "activity_sha256": "a5a0f29f366bb1f37b3eb25133fe836e0ae6a5802b20ad25f5c5fd2d358d8707",
+    "video_sha256": "138d10245633d1566cfd7c6235c3a8cbc08618a52d63378f153f633919bbff59",
+    "seed": 0,
+    "requested_samples": 80,
+    "sample_count": 80,
+    "same_video_as_training": false,
+    "excluded_training_buffer_s": 0.4,
+    "sampling": "uniform over frame-slot pairs, predictions hidden from reviewer",
+    "note": "Same-video testing, even with unused clips, is not independent-video generalization testing."
+  }
+}

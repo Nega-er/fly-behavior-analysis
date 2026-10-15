@@ -1,0 +1,336 @@
+{
+  "schema_version": 1,
+  "unit": "px",
+  "rate_unit": "px/s",
+  "alpha": 0.05,
+  "metric": "measured_distance / valid_observation_seconds (including stopped intervals)",
+  "boundaries_s": [
+    0,
+    30,
+    60,
+    95.3683205278465
+  ],
+  "individuals": [
+    {
+      "slot": 1,
+      "included": true,
+      "periods": [
+        {
+          "label": "0〜30秒",
+          "distance": 105.21134146991753,
+          "valid_s": 30.0,
+          "coverage": 1.0,
+          "mean_distance_per_s": 3.5070447156639175
+        },
+        {
+          "label": "30〜60秒",
+          "distance": 317.39147515054935,
+          "valid_s": 25.963016017710636,
+          "coverage": 0.8654338672570212,
+          "mean_distance_per_s": 12.224753662442037
+        },
+        {
+          "label": "60秒以降",
+          "distance": 40.40029206420638,
+          "valid_s": 35.36832052784651,
+          "coverage": 1.0,
+          "mean_distance_per_s": 1.1422734091204036
+        }
+      ]
+    },
+    {
+      "slot": 2,
+      "included": true,
+      "periods": [
+        {
+          "label": "0〜30秒",
+          "distance": 29.648913663714183,
+          "valid_s": 30.0,
+          "coverage": 1.0,
+          "mean_distance_per_s": 0.988297122123806
+        },
+        {
+          "label": "30〜60秒",
+          "distance": 59.20973189505151,
+          "valid_s": 30.0,
+          "coverage": 1.0,
+          "mean_distance_per_s": 1.9736577298350504
+        },
+        {
+          "label": "60秒以降",
+          "distance": 30.424485989363095,
+          "valid_s": 35.36832052784651,
+          "coverage": 1.0,
+          "mean_distance_per_s": 0.8602185666522959
+        }
+      ]
+    },
+    {
+      "slot": 3,
+      "included": true,
+      "periods": [
+        {
+          "label": "0〜30秒",
+          "distance": 81.95161702653277,
+          "valid_s": 30.0,
+          "coverage": 1.0,
+          "mean_distance_per_s": 2.7317205675510925
+        },
+        {
+          "label": "30〜60秒",
+          "distance": 178.06633133399964,
+          "valid_s": 24.92121369970048,
+          "coverage": 0.8307071233233494,
+          "mean_distance_per_s": 7.145170916621118
+        },
+        {
+          "label": "60秒以降",
+          "distance": 135.2476459936159,
+          "valid_s": 33.067673742240785,
+          "coverage": 0.9349517661209173,
+          "mean_distance_per_s": 4.090026019001451
+        }
+      ]
+    },
+    {
+      "slot": 4,
+      "included": true,
+      "periods": [
+        {
+          "label": "0〜30秒",
+          "distance": 493.21438403262835,
+          "valid_s": 30.0,
+          "coverage": 1.0,
+          "mean_distance_per_s": 16.44047946775428
+        },
+        {
+          "label": "30〜60秒",
+          "distance": 71.09296938672365,
+          "valid_s": 26.049832877544816,
+          "coverage": 0.8683277625848272,
+          "mean_distance_per_s": 2.7291142219958893
+        },
+        {
+          "label": "60秒以降",
+          "distance": 20.031687029025875,
+          "valid_s": 35.36832052784651,
+          "coverage": 1.0,
+          "mean_distance_per_s": 0.5663737132571603
+        }
+      ]
+    },
+    {
+      "slot": 5,
+      "included": true,
+      "periods": [
+        {
+          "label": "0〜30秒",
+          "distance": 39.777077385576014,
+          "valid_s": 30.0,
+          "coverage": 1.0,
+          "mean_distance_per_s": 1.3259025795192005
+        },
+        {
+          "label": "30〜60秒",
+          "distance": 53.26815115636807,
+          "valid_s": 30.0,
+          "coverage": 1.0,
+          "mean_distance_per_s": 1.7756050385456024
+        },
+        {
+          "label": "60秒以降",
+          "distance": 39.39600325349996,
+          "valid_s": 35.36832052784651,
+          "coverage": 1.0,
+          "mean_distance_per_s": 1.1138782578743693
+        }
+      ]
+    },
+    {
+      "slot": 6,
+      "included": true,
+      "periods": [
+        {
+          "label": "0〜30秒",
+          "distance": 46.066512762460036,
+          "valid_s": 30.0,
+          "coverage": 1.0,
+          "mean_distance_per_s": 1.5355504254153345
+        },
+        {
+          "label": "30〜60秒",
+          "distance": 911.4381834499864,
+          "valid_s": 30.0,
+          "coverage": 1.0,
+          "mean_distance_per_s": 30.381272781666212
+        },
+        {
+          "label": "60秒以降",
+          "distance": 79.33214816048152,
+          "valid_s": 35.36832052784651,
+          "coverage": 1.0,
+          "mean_distance_per_s": 2.2430284213812475
+        }
+      ]
+    },
+    {
+      "slot": 7,
+      "included": true,
+      "periods": [
+        {
+          "label": "0〜30秒",
+          "distance": 36.18257795948489,
+          "valid_s": 30.0,
+          "coverage": 1.0,
+          "mean_distance_per_s": 1.2060859319828297
+        },
+        {
+          "label": "30〜60秒",
+          "distance": 323.3229641157702,
+          "valid_s": 28.480704952901853,
+          "coverage": 0.9493568317633951,
+          "mean_distance_per_s": 11.352351167235675
+        },
+        {
+          "label": "60秒以降",
+          "distance": 34.08958050030638,
+          "valid_s": 35.36832052784651,
+          "coverage": 1.0,
+          "mean_distance_per_s": 0.9638450452705739
+        }
+      ]
+    },
+    {
+      "slot": 8,
+      "included": true,
+      "periods": [
+        {
+          "label": "0〜30秒",
+          "distance": 78.21334975650657,
+          "valid_s": 30.0,
+          "coverage": 1.0,
+          "mean_distance_per_s": 2.607111658550219
+        },
+        {
+          "label": "30〜60秒",
+          "distance": 456.76379723432166,
+          "valid_s": 29.17523983157529,
+          "coverage": 0.972507994385843,
+          "mean_distance_per_s": 15.655871206926053
+        },
+        {
+          "label": "60秒以降",
+          "distance": 44.84440727909991,
+          "valid_s": 35.36832052784651,
+          "coverage": 1.0,
+          "mean_distance_per_s": 1.2679258333398276
+        }
+      ]
+    },
+    {
+      "slot": 9,
+      "included": true,
+      "periods": [
+        {
+          "label": "0〜30秒",
+          "distance": 76.84928668352536,
+          "valid_s": 30.0,
+          "coverage": 1.0,
+          "mean_distance_per_s": 2.5616428894508454
+        },
+        {
+          "label": "30〜60秒",
+          "distance": 695.9508936483777,
+          "valid_s": 30.0,
+          "coverage": 1.0,
+          "mean_distance_per_s": 23.19836312161259
+        },
+        {
+          "label": "60秒以降",
+          "distance": 39.10136858223258,
+          "valid_s": 35.36832052784651,
+          "coverage": 1.0,
+          "mean_distance_per_s": 1.1055477896228332
+        }
+      ]
+    }
+  ],
+  "total_slots": 9,
+  "n": 9,
+  "included_slots": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "excluded_slots": [],
+  "seed": 20261014,
+  "resamples": 19999,
+  "periods": [
+    {
+      "label": "0〜30秒",
+      "duration_s": 30.0,
+      "n": 9,
+      "mean": 3.655981706445725,
+      "sd": 4.869054805801921,
+      "min_coverage": 1.0
+    },
+    {
+      "label": "30〜60秒",
+      "duration_s": 30.0,
+      "n": 9,
+      "mean": 11.82623998298669,
+      "sd": 9.946246971036535,
+      "min_coverage": 0.8307071233233494
+    },
+    {
+      "label": "60秒以降",
+      "duration_s": 35.36832052784651,
+      "n": 9,
+      "mean": 1.4836796728355734,
+      "sd": 1.0789392114640612,
+      "min_coverage": 0.9349517661209173
+    }
+  ],
+  "pairs": [
+    {
+      "a": "0〜30秒",
+      "b": "30〜60秒",
+      "mean_difference": -8.170258276540967,
+      "p": 0.08203125,
+      "exact": true,
+      "p_holm": 0.1640625,
+      "significant": false
+    },
+    {
+      "a": "0〜30秒",
+      "b": "60秒以降",
+      "mean_difference": 2.1723020336101513,
+      "p": 0.1640625,
+      "exact": true,
+      "p_holm": 0.1640625,
+      "significant": false
+    },
+    {
+      "a": "30〜60秒",
+      "b": "60秒以降",
+      "mean_difference": 10.34256031015112,
+      "p": 0.00390625,
+      "exact": true,
+      "p_holm": 0.01171875,
+      "significant": true
+    }
+  ],
+  "method": "paired within-individual permutation test of mean differences; Holm correction for 3 exact paired comparisons",
+  "assumptions": "Period labels must be exchangeable under the null; display slots must retain identity. Animals in one arena may not be independent. Exploratory within-video inference, not replicated-arena population inference.",
+  "status": "ok",
+  "omnibus_statistic": 59.480190066575375,
+  "omnibus_p": 0.0111,
+  "omnibus_significant": true,
+  "omnibus_exact": false
+}

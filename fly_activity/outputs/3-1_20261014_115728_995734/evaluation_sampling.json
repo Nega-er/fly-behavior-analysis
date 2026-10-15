@@ -1,0 +1,12 @@
+{
+  "activity_sha256": "a6372e317f384b85fd5ced0dc0dd972c7579a72926b62fdf18dd609798869852",
+  "video_sha256": "6082d499f06513eb82f0e4e9acd439fd78108d3b8e02be51ca155b4e8149980e",
+  "seed": 0,
+  "requested_samples": 80,
+  "sample_count": 80,
+  "same_video_as_training": true,
+  "excluded_training_buffer_s": 0.4,
+  "sampling": "uniform over frame-slot pairs, predictions hidden from reviewer",
+  "note": "Same-video testing, even with unused clips, is not independent-video generalization testing.",
+  "cumulative_learning_enabled": true
+}

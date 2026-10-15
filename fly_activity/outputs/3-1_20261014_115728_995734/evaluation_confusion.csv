@@ -1,0 +1,5 @@
+﻿human,forward,backward,stopped,lateral,unknown
+forward,12,3,0,2,0
+backward,0,0,0,0,0
+stopped,2,2,49,5,0
+lateral,0,0,0,0,0

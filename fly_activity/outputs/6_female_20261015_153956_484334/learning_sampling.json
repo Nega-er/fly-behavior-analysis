@@ -1,0 +1,21 @@
+{
+  "activity_sha256": "37eaabda224077ca04bf948674a21159ddf5a7a12fbcbbcec41a77f3fed7844a",
+  "video_sha256": "98372358059084fc2c033d2456df8c1b5a71c3fa8a6f862a69c72e2400a989fd",
+  "seed": 0,
+  "requested_samples": 80,
+  "sample_count": 80,
+  "same_video_as_training": false,
+  "excluded_training_buffer_s": 0.4,
+  "sampling_mode": "learning",
+  "selection_counts": {
+    "backward": 20,
+    "low_head_confidence": 20,
+    "random": 20,
+    "unknown": 20
+  },
+  "low_head_confidence_threshold": 0.6,
+  "minimum_same_slot_spacing_s": 0.6,
+  "sampling": "priority Unknown/backward/low head confidence plus random; not unbiased accuracy",
+  "note": "Same-video testing, even with unused clips, is not independent-video generalization testing.",
+  "cumulative_learning_enabled": true
+}

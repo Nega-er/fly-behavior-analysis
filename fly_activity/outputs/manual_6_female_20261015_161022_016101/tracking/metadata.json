@@ -1,0 +1,16 @@
+{
+  "fps": 23.037,
+  "frames_decoded": 2075,
+  "frames_reported": 2075,
+  "timing_source": "frame/FPS (constant-frame-rate assumption)",
+  "width": 1392,
+  "height": 1040,
+  "review_frames": 1376,
+  "repeated_encoded_frames": 0,
+  "identity_method": "reserved_position_appearance",
+  "identity_reacquisitions": 32,
+  "reserved_missing_id_frames": 1668,
+  "above_requested_population_fraction": 0.017349397590361446,
+  "stationary_recovery_frames": 0,
+  "source": "/Users/ruvi/repo_tex/Exp_3A/4班/6_female.avi"
+}

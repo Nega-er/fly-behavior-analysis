@@ -1,0 +1,78 @@
+{
+  "completed_samples": 80,
+  "scorable_samples": 75,
+  "unscorable_samples": 5,
+  "accuracy_including_unknown_as_error": 0.8133333333333334,
+  "prediction_coverage": 1.0,
+  "accuracy_on_classified_samples": 0.8133333333333334,
+  "macro_f1_present_reference_classes": 0.8450406994271933,
+  "classes": {
+    "forward": {
+      "precision": 0.8571428571428571,
+      "recall": 0.7058823529411765,
+      "f1": 0.7741935483870968,
+      "reference_samples": 17
+    },
+    "backward": {
+      "precision": 0.0,
+      "recall": null,
+      "f1": 0.0,
+      "reference_samples": 0
+    },
+    "stopped": {
+      "precision": 1.0,
+      "recall": 0.8448275862068966,
+      "f1": 0.9158878504672897,
+      "reference_samples": 58
+    },
+    "lateral": {
+      "precision": 0.0,
+      "recall": null,
+      "f1": 0.0,
+      "reference_samples": 0
+    }
+  },
+  "confusion_matrix": {
+    "forward": {
+      "forward": 12,
+      "backward": 3,
+      "stopped": 0,
+      "lateral": 2,
+      "unknown": 0
+    },
+    "backward": {
+      "forward": 0,
+      "backward": 0,
+      "stopped": 0,
+      "lateral": 0,
+      "unknown": 0
+    },
+    "stopped": {
+      "forward": 2,
+      "backward": 2,
+      "stopped": 49,
+      "lateral": 5,
+      "unknown": 0
+    },
+    "lateral": {
+      "forward": 0,
+      "backward": 0,
+      "stopped": 0,
+      "lateral": 0,
+      "unknown": 0
+    }
+  },
+  "note": "Unknown predictions count as errors for scorable human labels. Unidentifiable target animals are unscorable, so this is not an independent detection/identity accuracy test. Nearby video samples are correlated; sample counts are not independent experimental replicates.",
+  "provenance": {
+    "activity_sha256": "a6372e317f384b85fd5ced0dc0dd972c7579a72926b62fdf18dd609798869852",
+    "video_sha256": "6082d499f06513eb82f0e4e9acd439fd78108d3b8e02be51ca155b4e8149980e",
+    "seed": 0,
+    "requested_samples": 80,
+    "sample_count": 80,
+    "same_video_as_training": true,
+    "excluded_training_buffer_s": 0.4,
+    "sampling": "uniform over frame-slot pairs, predictions hidden from reviewer",
+    "note": "Same-video testing, even with unused clips, is not independent-video generalization testing.",
+    "cumulative_learning_enabled": true
+  }
+}

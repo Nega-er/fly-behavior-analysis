@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "video": "/Users/ruvi/repo_tex/Exp_3A/4班/6_female.avi",
+  "tracks": "/Users/ruvi/repo_tex/Exp_3A/tuji/fly_activity/outputs/manual_6_female_20261015_161022_016101/tracking/tracks.csv",
+  "video_sha256": "98372358059084fc2c033d2456df8c1b5a71c3fa8a6f862a69c72e2400a989fd",
+  "tracks_sha256": "7fe08389e7a2f1b7fa8a7b0612f79265434c7bba7385c7900321b976996485f1",
+  "slots": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "interval_s": 1,
+  "labels": {
+    "1:0": "groom_body",
+    "1:1": "stopped"
+  },
+  "history": [
+    {
+      "slot": 1,
+      "start_s": 0,
+      "previous": "",
+      "behavior": "groom_body",
+      "updated_utc": "2026-10-15T07:16:15.997273+00:00"
+    },
+    {
+      "slot": 1,
+      "start_s": 1,
+      "previous": "",
+      "behavior": "stopped",
+      "updated_utc": "2026-10-15T07:16:20.957178+00:00"
+    }
+  ],
+  "fps": 23.037,
+  "frames": 2075,
+  "width": 1392,
+  "height": 1040
+}

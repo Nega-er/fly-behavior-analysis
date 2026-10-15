@@ -1,8 +1,8 @@
 {
-  "version": 796,
-  "model_file": "models/model_000796.json",
-  "updated_utc": "2026-10-15T05:23:42.221799+00:00",
-  "labels": 796,
-  "behavior_samples": 715,
-  "head_samples": 84
+  "version": 878,
+  "model_file": "models/model_000878.json",
+  "updated_utc": "2026-10-15T07:37:16.124621+00:00",
+  "labels": 878,
+  "behavior_samples": 778,
+  "head_samples": 98
 }

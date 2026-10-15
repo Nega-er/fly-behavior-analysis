@@ -1,0 +1,13 @@
+{
+  "expected_flies": 9,
+  "duration_s": 95.3683205278465,
+  "unit": "px",
+  "measured_distance": 4516.487176963325,
+  "valid_fly_seconds": 840.604245344446,
+  "possible_fly_seconds": 858.3148847506186,
+  "interval_coverage": 0.9793658018510091,
+  "distance_per_valid_fly_second": 5.37290550455482,
+  "all_seven_interval_fraction": 0.871643149749659,
+  "smoothing_window_frames": 3,
+  "warning": "Measured distance excludes missing/ambiguous intervals; not a complete-path estimate. Slots are not verified identities across segments. Movement thresholds are provisional."
+}

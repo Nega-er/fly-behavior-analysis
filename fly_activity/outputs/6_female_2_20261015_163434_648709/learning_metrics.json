@@ -1,0 +1,89 @@
+{
+  "completed_samples": 2,
+  "scorable_samples": 0,
+  "unscorable_samples": 2,
+  "human_unknown_samples": 2,
+  "accuracy_including_unknown_as_error": null,
+  "prediction_coverage": null,
+  "accuracy_on_classified_samples": null,
+  "macro_f1_present_reference_classes": null,
+  "classes": {
+    "forward": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "reference_samples": 0
+    },
+    "backward": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "reference_samples": 0
+    },
+    "stopped": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "reference_samples": 0
+    },
+    "lateral": {
+      "precision": null,
+      "recall": null,
+      "f1": null,
+      "reference_samples": 0
+    }
+  },
+  "confusion_matrix": {
+    "forward": {
+      "forward": 0,
+      "backward": 0,
+      "stopped": 0,
+      "lateral": 0,
+      "unknown": 0
+    },
+    "backward": {
+      "forward": 0,
+      "backward": 0,
+      "stopped": 0,
+      "lateral": 0,
+      "unknown": 0
+    },
+    "stopped": {
+      "forward": 0,
+      "backward": 0,
+      "stopped": 0,
+      "lateral": 0,
+      "unknown": 0
+    },
+    "lateral": {
+      "forward": 0,
+      "backward": 0,
+      "stopped": 0,
+      "lateral": 0,
+      "unknown": 0
+    }
+  },
+  "note": "Unknown predictions count as errors for scorable human labels. Unidentifiable target animals are unscorable, so this is not an independent detection/identity accuracy test. Nearby video samples are correlated; sample counts are not independent experimental replicates.",
+  "provenance": {
+    "activity_sha256": "36b0b2e7d8279337008a99178c4ac839018de2b7a4267d566ce9fe68c80c2a30",
+    "video_sha256": "8fcd2a1e431ca5cb096349e92ffe14b433bd8dcd2d76375d2152813022b9dbb0",
+    "seed": 0,
+    "requested_samples": 80,
+    "sample_count": 80,
+    "same_video_as_training": false,
+    "excluded_training_buffer_s": 0.4,
+    "sampling_mode": "learning",
+    "selection_counts": {
+      "backward": 20,
+      "low_head_confidence": 20,
+      "random": 20,
+      "unknown": 20
+    },
+    "low_head_confidence_threshold": 0.6,
+    "minimum_same_slot_spacing_s": 0.6,
+    "sampling": "priority Unknown/backward/low head confidence plus random; not unbiased accuracy",
+    "note": "Same-video testing, even with unused clips, is not independent-video generalization testing.",
+    "cumulative_learning_enabled": true
+  },
+  "representative_accuracy": false
+}

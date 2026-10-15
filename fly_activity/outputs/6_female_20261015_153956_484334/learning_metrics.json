@@ -1,0 +1,89 @@
+{
+  "completed_samples": 80,
+  "scorable_samples": 74,
+  "unscorable_samples": 6,
+  "human_unknown_samples": 6,
+  "accuracy_including_unknown_as_error": 0.5135135135135135,
+  "prediction_coverage": 0.8108108108108109,
+  "accuracy_on_classified_samples": 0.6333333333333333,
+  "macro_f1_present_reference_classes": 0.49375,
+  "classes": {
+    "forward": {
+      "precision": 0.7777777777777778,
+      "recall": 0.4375,
+      "f1": 0.56,
+      "reference_samples": 16
+    },
+    "backward": {
+      "precision": 0.13636363636363635,
+      "recall": 1.0,
+      "f1": 0.24,
+      "reference_samples": 3
+    },
+    "stopped": {
+      "precision": 1.0,
+      "recall": 0.5094339622641509,
+      "f1": 0.675,
+      "reference_samples": 53
+    },
+    "lateral": {
+      "precision": 0.5,
+      "recall": 0.5,
+      "f1": 0.5,
+      "reference_samples": 2
+    }
+  },
+  "confusion_matrix": {
+    "forward": {
+      "forward": 7,
+      "backward": 5,
+      "stopped": 0,
+      "lateral": 0,
+      "unknown": 4
+    },
+    "backward": {
+      "forward": 0,
+      "backward": 3,
+      "stopped": 0,
+      "lateral": 0,
+      "unknown": 0
+    },
+    "stopped": {
+      "forward": 2,
+      "backward": 13,
+      "stopped": 27,
+      "lateral": 1,
+      "unknown": 10
+    },
+    "lateral": {
+      "forward": 0,
+      "backward": 1,
+      "stopped": 0,
+      "lateral": 1,
+      "unknown": 0
+    }
+  },
+  "note": "Unknown predictions count as errors for scorable human labels. Unidentifiable target animals are unscorable, so this is not an independent detection/identity accuracy test. Nearby video samples are correlated; sample counts are not independent experimental replicates.",
+  "provenance": {
+    "activity_sha256": "37eaabda224077ca04bf948674a21159ddf5a7a12fbcbbcec41a77f3fed7844a",
+    "video_sha256": "98372358059084fc2c033d2456df8c1b5a71c3fa8a6f862a69c72e2400a989fd",
+    "seed": 0,
+    "requested_samples": 80,
+    "sample_count": 80,
+    "same_video_as_training": false,
+    "excluded_training_buffer_s": 0.4,
+    "sampling_mode": "learning",
+    "selection_counts": {
+      "backward": 20,
+      "low_head_confidence": 20,
+      "random": 20,
+      "unknown": 20
+    },
+    "low_head_confidence_threshold": 0.6,
+    "minimum_same_slot_spacing_s": 0.6,
+    "sampling": "priority Unknown/backward/low head confidence plus random; not unbiased accuracy",
+    "note": "Same-video testing, even with unused clips, is not independent-video generalization testing.",
+    "cumulative_learning_enabled": true
+  },
+  "representative_accuracy": false
+}
