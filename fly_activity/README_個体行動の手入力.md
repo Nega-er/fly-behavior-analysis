@@ -1,7 +1,7 @@
 # 個体行動を人の手で記録するアプリ
 
-Macは `tuji/個体行動の手入力.command`、Windowsは `tuji/個体行動の手入力.bat` を開きます。
-既存の解析アプリと同じPython環境・依存ライブラリを使います。
+Macは `tuji/FlyBehavior.app` で「個体行動の手入力」を選び、Windowsは `tuji/Windows_個体行動の手入力.bat` を開きます。
+管理者権限なしで、Condaから分離した専用Python 3.12.10・venvと固定版ライブラリを自動で準備します。初回はインターネット接続が必要です。
 
 ## 入力を始める
 

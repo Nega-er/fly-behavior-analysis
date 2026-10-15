@@ -1,44 +1,81 @@
+import importlib.util
 import json
 from pathlib import Path
-import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
 
 import launch
 
+SPEC=importlib.util.spec_from_file_location('runtime_manager',Path(__file__).parent/'setup/runtime_manager.py')
+runtime=importlib.util.module_from_spec(SPEC);SPEC.loader.exec_module(runtime)
+
 
 class LaunchTests(unittest.TestCase):
     def tree(self,folder):
-        root=Path(folder);(root/'fly_activity').mkdir();(root/'fly_activity/requirements.txt').write_text('numpy>=1.24\n')
-        return root
+        root=Path(folder).resolve();setup=root/'setup';setup.mkdir()
+        (setup/'runtime-lock.json').write_text(json.dumps(dict(python_version='3.12.10')))
+        (setup/'requirements.in').write_text('numpy==1.26.4\n')
+        (setup/'requirements.lock').write_text('numpy==1.26.4 --hash=sha256:example\n')
+        base=root/'.runtime/python/cpython-3.12.10'
+        for directory,filename in (('tcl8.6','init.tcl'),('tk8.6','tk.tcl')):
+            path=base/'lib'/directory;path.mkdir(parents=True);(path/filename).write_text('test')
+        return root,base
 
-    def test_ready_environment_does_not_install(self):
+    def test_conda_python_and_library_paths_are_removed(self):
+        source=dict(CONDA_PREFIX='/conda',CONDA_SHLVL='2',MAMBA_ROOT_PREFIX='/mamba',PYTHONPATH='/other',
+                    PYTHONHOME='/conda',VIRTUAL_ENV='/old',TCL_LIBRARY='/conda/tcl',TK_LIBRARY='/conda/tk',
+                    UV_PYTHON='/conda/python',PATH='/conda/bin',HOME='/home/test')
+        env=runtime.clean_environment(Path('/project'),source)
+        for key in ('CONDA_PREFIX','CONDA_SHLVL','MAMBA_ROOT_PREFIX','PYTHONPATH','PYTHONHOME','TCL_LIBRARY','TK_LIBRARY','VIRTUAL_ENV','UV_PYTHON'):
+            self.assertNotIn(key,env)
+        self.assertNotIn('/conda',env['PATH']);self.assertEqual(source['CONDA_PREFIX'],'/conda')
+        self.assertEqual(env['HOME'],'/home/test')
+
+    def test_missing_packages_are_synced_with_hashes_in_dedicated_venv(self):
         with tempfile.TemporaryDirectory() as folder:
-            root=self.tree(folder)
-            with patch('launch.probe',return_value=dict(supported=True,tk=True,missing=[])),patch('launch.subprocess.run') as run:
-                self.assertEqual(launch.ensure_environment(root,python='/python'),Path('/python'))
+            root,base=self.tree(folder)
+            ready=dict(python='3.12.10',conda=False,base_prefix=str(base),missing=[])
+            with patch.object(runtime.platform,'python_version',return_value='3.12.10'),patch.object(runtime.sys,'base_prefix',str(base)),patch.object(runtime,'probe',side_effect=[dict(ready,missing=['numpy']),ready]),patch.object(runtime.subprocess,'run') as run:
+                python,env,_=runtime.ensure_environment(Path('/uv'),root)
+            self.assertTrue(python.is_relative_to(root/'.runtime/venvs'))
+            self.assertEqual(env['VIRTUAL_ENV'],str(python.parent.parent))
+            self.assertEqual(env['TCL_LIBRARY'],str(base/'lib/tcl8.6'))
+            calls=[call.args[0] for call in run.call_args_list]
+            self.assertEqual(calls[0][1],'venv')
+            self.assertIn('--require-hashes',calls[1]);self.assertEqual(calls[1][1:3],['pip','sync'])
+            self.assertEqual(calls[2][1:3],['pip','check'])
+
+    def test_wrong_python_is_rejected_without_changing_old_venv_or_learning(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root,base=self.tree(folder)
+            old=root/'.venv';old.mkdir();(old/'keep').write_text('original')
+            learning=root/'fly_activity/learning';learning.mkdir(parents=True);(learning/'current.json').write_text('original')
+            with patch.object(runtime.platform,'python_version',return_value='3.14.0'),patch.object(runtime.subprocess,'run') as run:
+                with self.assertRaisesRegex(RuntimeError,'3.12.10'):runtime.ensure_environment('/uv',root)
+                run.assert_not_called()
+            self.assertEqual((old/'keep').read_text(),'original')
+            self.assertEqual((learning/'current.json').read_text(),'original')
+
+    def test_external_or_conda_interpreter_is_not_accepted(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root,_=self.tree(folder)
+            with patch.object(runtime.platform,'python_version',return_value='3.12.10'),patch.object(runtime.sys,'base_prefix',str(root/'conda')),patch.object(runtime.subprocess,'run') as run:
+                with self.assertRaisesRegex(RuntimeError,'Conda'):runtime.ensure_environment('/uv',root)
                 run.assert_not_called()
 
-    def test_missing_requirements_install_only_inside_project_venv(self):
-        with tempfile.TemporaryDirectory() as folder:
-            root=self.tree(folder)
-            with patch('launch.probe',side_effect=[dict(supported=True,tk=True,missing=['numpy>=1.24']),dict(supported=True,tk=True,missing=[])]),patch('launch.subprocess.run') as run:
-                selected=launch.ensure_environment(root,python='/python')
-                calls=[call.args[0] for call in run.call_args_list]
-                self.assertEqual(calls[0],['/python','-m','venv',str(root/'.venv')])
-                self.assertEqual(calls[1][0],str(selected))
-                self.assertEqual(calls[1][-2:],['-r',str(root/'fly_activity/requirements.txt')])
-                self.assertEqual(selected.parent.parent,root/'.venv')
+    def test_platform_launchers_delegate_without_using_shell_profiles(self):
+        mac=launch.command('manual',['--smoke-test'],root='/project',platform='darwin')
+        self.assertEqual(mac[:2],['/bin/zsh','-f']);self.assertIn('--app',mac)
+        win=launch.command('manual',root='/project',platform='win32')
+        self.assertIn('-NoProfile',win);self.assertIn('Bypass',win)
+        with self.assertRaises(ValueError):launch.command('invalid',platform='darwin')
 
-    def test_missing_tk_and_failed_install_do_not_launch(self):
-        with tempfile.TemporaryDirectory() as folder:
-            root=self.tree(folder)
-            with patch('launch.probe',return_value=dict(supported=True,tk=False,missing=[])),patch('launch.subprocess.run') as run:
-                with self.assertRaisesRegex(RuntimeError,'Tkinter'):launch.ensure_environment(root,python='/python')
-                run.assert_not_called()
-            with patch('launch.probe',return_value=dict(supported=True,tk=True,missing=['numpy>=1.24'])),patch('launch.subprocess.run',side_effect=subprocess.CalledProcessError(1,'venv')):
-                with self.assertRaises(subprocess.CalledProcessError):launch.ensure_environment(root,python='/python')
+    def test_lock_contains_exact_versions_and_hashes_for_all_requirements(self):
+        expected=runtime.expected_versions()
+        text=(Path(__file__).parent/'setup/requirements.lock').read_text()
+        for package,version in expected.items():self.assertIn(package.lower()+'=='+version,text.lower())
+        self.assertIn('--hash=sha256:',text)
 
 
 if __name__=='__main__':unittest.main()

@@ -192,7 +192,8 @@ def review(result_dir,count=80,seed=0,smoke_test=False,learn=True,sampling="rand
     import tkinter as tk
     from tkinter import ttk,messagebox
     import cv2
-    from PIL import Image,ImageTk
+    from PIL import Image
+    from tk_images import photo_image
     from cumulative_learning import LearningStore,TeacherExtractor,STORE,atomic_json
     from automatic_head import load_model
     result_dir=Path(result_dir)
@@ -240,7 +241,7 @@ def review(result_dir,count=80,seed=0,smoke_test=False,learn=True,sampling="rand
     def show_frame():
         if not clip:
             return
-        image_label.photo=ImageTk.PhotoImage(Image.fromarray(clip[clip_index[0] % len(clip)]))
+        image_label.photo=photo_image(Image.fromarray(clip[clip_index[0] % len(clip)]))
         image_label.configure(image=image_label.photo)
         clip_index[0]+=1
         job[0]=root.after(max(20,round(1000/fps)),show_frame)

@@ -1,5 +1,3 @@
-numpy>=1.24
-opencv-python>=4.8
-scipy>=1.10
-matplotlib>=3.7
-Pillow>=9
+# Managed runtime: all direct and transitive dependencies are pinned and hashed.
+--require-hashes
+-r ../setup/requirements.lock

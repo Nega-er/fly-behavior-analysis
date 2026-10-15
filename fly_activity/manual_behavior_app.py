@@ -10,7 +10,8 @@ import tkinter as tk
 from tkinter import ttk,filedialog,messagebox
 
 import cv2
-from PIL import Image,ImageTk
+from PIL import Image
+from tk_images import photo_image
 
 from analyze_flies import DEFAULTS,validate_config,track_video
 from video_setup import prepare_video
@@ -210,7 +211,7 @@ class ManualApp:
 
     def image(self,widget,image,size):
         picture=Image.fromarray(cv2.cvtColor(image,cv2.COLOR_BGR2RGB));picture.thumbnail(size)
-        widget.photo=ImageTk.PhotoImage(picture);widget.configure(image=widget.photo)
+        widget.photo=photo_image(picture);widget.configure(image=widget.photo)
 
     def show_frame(self,frame):
         if int(self.cap.get(1))!=frame:self.cap.set(1,frame)
@@ -296,10 +297,15 @@ class ManualApp:
 
     def show_graph(self):
         if not self.session:return
-        from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-        if self.graph_canvas:self.graph_canvas.get_tk_widget().destroy()
-        self.graph_canvas=FigureCanvasTkAgg(behavior_figure(self.session),master=self.graph_tab)
-        self.graph_canvas.draw();self.graph_canvas.get_tk_widget().pack(fill='both',expand=True)
+        from matplotlib.backends.backend_agg import FigureCanvasAgg
+        canvas=FigureCanvasAgg(behavior_figure(self.session));canvas.draw()
+        image=Image.frombytes('RGBA',canvas.get_width_height(),canvas.buffer_rgba().tobytes())
+        image.thumbnail((max(300,self.root.winfo_width()-60),max(200,self.root.winfo_height()-260)))
+        if self.graph_canvas:self.graph_canvas.destroy()
+        self.graph_canvas=ttk.Label(self.graph_tab,anchor='center')
+        self.graph_canvas.photo=photo_image(image)
+        self.graph_canvas.configure(image=self.graph_canvas.photo)
+        self.graph_canvas.pack(fill='both',expand=True)
 
     def export(self):
         if self.busy or not self.session:return

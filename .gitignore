@@ -43,3 +43,6 @@ __pycache__/
 /amadeus_*/_autogen_*.yaml
 /amadeus_*/log.txt
 /amadeus_*/time.csv
+
+# Isolated Python, virtual environments, installers and diagnostics
+.runtime/

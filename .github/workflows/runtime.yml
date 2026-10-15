@@ -1,0 +1,55 @@
+name: Isolated desktop runtime
+on:
+  push:
+    paths:
+      - 'setup/**'
+      - 'FlyBehavior.app/**'
+      - 'launch.py'
+      - 'test_launch.py'
+      - '.github/workflows/runtime.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Mac setup, Conda isolation and GUI
+        if: runner.os == 'macOS'
+        shell: bash
+        env:
+          CONDA_PREFIX: /fake/conda
+          CONDA_DEFAULT_ENV: base
+          CONDA_SHLVL: '1'
+          PYTHONPATH: /fake/conda/site-packages
+        run: |
+          /bin/zsh -f setup/mac.sh --app check
+          /bin/zsh -f setup/mac.sh --app manual --smoke-test
+          /bin/zsh -f setup/mac.sh --app analysis --smoke-test
+      - name: Windows setup, Conda isolation and GUI
+        if: runner.os == 'Windows'
+        shell: powershell
+        env:
+          CONDA_PREFIX: C:\fake\conda
+          CONDA_DEFAULT_ENV: base
+          CONDA_SHLVL: '1'
+          PYTHONPATH: C:\fake\conda\site-packages
+        run: |
+          & ./setup/windows.ps1 -App check
+          & ./setup/windows.ps1 -App manual -AppArguments @('--smoke-test')
+          & ./setup/windows.ps1 -App analysis -AppArguments @('--smoke-test')
+      - name: Upload runtime diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: diagnostics-${{ matrix.os }}
+          path: |
+            .runtime/diagnostics.json
+            .runtime/logs/*.log
+          if-no-files-found: ignore

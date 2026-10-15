@@ -2,30 +2,47 @@
 
 動画から複数のハエを検出・追跡し、移動と前進・後退を解析するアプリと、個体ごとの行動を人の手で1秒ずつ記録するアプリです。
 
-## 起動
+## 起動（管理者権限・既存Python・Condaは不要）
 
-Python 3.10以上（Tkinter/Tcl/Tk付き）をインストールしてください。
+ZIPを展開し、自分が書き込めるフォルダで使ってください。Mac用とWindows用を分けています。
 
-| 用途 | Mac | Windows |
-|---|---|---|
-| 検出・移動・前進後退の自動解析 | `ハエ解析アプリ.command` | `ハエ解析アプリ.bat` |
-| 個体ごとの行動を人が記録 | `個体行動の手入力.command` | `個体行動の手入力.bat` |
+| OS | 起動するもの |
+|---|---|
+| Mac | **`FlyBehavior.app`** をダブルクリックし、「個体行動の手入力」「自動解析」「環境確認のみ」から選択 |
+| Windows | **`Windows_個体行動の手入力.bat`** または **`Windows_自動解析.bat`** をダブルクリック |
+| Windowsの診断のみ | `Windows_環境確認.bat` |
 
-起動ファイルをダブルクリックしてください。必要なライブラリが揃っていればそのまま起動します。
-不足・バージョン不足がある場合は、このフォルダ内の `.venv` に専用Python環境を作成し、`fly_activity/requirements.txt` から自動インストールします。
-初回のインストールにはインターネット接続が必要です。既存の `.venv` がある場合はその環境を使用します。
-TkinterとPython本体はpipで追加できないため、Pythonのインストール時に用意してください。
+`.command` やCondaのターミナルから起動する必要はありません。初回はインターネットに接続してください。
+Macでダウンロードした未署名アプリの確認が出た場合は、OSの「開く」操作で許可してください。このアプリは署名・公証済みではありません。
 
-ターミナルから起動することもできます。
+起動処理は次を順に実行します。
 
-```sh
-python3 launch.py manual
-python3 launch.py analysis
-```
+1. 継承されたConda・別venv・PYTHONPATH等を検出し、起動する子プロセスから除外。
+2. SHA256を確認した固定版uvと、アプリ専用の **CPython 3.12.10** をローカルに用意。
+3. 専用venvを作成し、Mac・Windows共通のハッシュ付きロックファイルから依存パッケージをインストール。
+4. バージョン・依存関係・Conda非使用・Tkinter・MP4書き出しと再読込みを確認。
+5. 検証したvenvのPythonでアプリを起動。
 
-Windowsでは `python launch.py manual` または `py -3 launch.py manual` を使います。
-使用するPythonを指定したい場合は環境変数 `FLY_ACTIVITY_PYTHON` を設定してください。
-Macで既存の `~/Applications/AMADEUS/.venv` がある場合は、そのPythonも利用できます。AMADEUSは通常の2アプリの実行には不要です。
+不足・異なる版・importに失敗するパッケージがあれば、専用venv内で再同期します。二度目以降は作成済みの環境を再利用します。
+`sudo`、管理者として実行、システムPythonやCondaへのpipインストール、シェルの初期設定の書換えは行いません。
+別のターミナルで動いているConda自体を終了・変更することもありません。
+
+ランタイム・venv・キャッシュはこのフォルダの `.runtime/`、学習データは従来どおり `fly_activity/learning/` に置きます。
+以前の `.venv` は削除・上書きせず、そのまま保持します。
+
+固定版は `setup/runtime-lock.json` と `setup/requirements.in`、全依存の版と配布ファイルのハッシュは `setup/requirements.lock` で管理します。
+NumPy 1.26.4 / OpenCV 4.10.0.84 / SciPy 1.11.4 / Matplotlib 3.10.6 / Pillow 11.3.0を使用します。
+MacはApple Silicon・Intel、Windowsは64bit Pythonを使う構成です。
+
+## 起動に失敗したとき
+
+「環境確認のみ」または `Windows_環境確認.bat` を実行し、次のファイルを確認してください。
+
+- `.runtime/diagnostics.json`：実際のPython・パッケージ版・Conda分離・OpenCV・MP4確認結果。
+- `.runtime/logs/setup-mac.log` または `setup-windows.log`：ダウンロード・インストール・アプリのエラー全文。
+
+管理されたPythonはAstralの[python-build-standalone](https://github.com/astral-sh/python-build-standalone)、環境管理は[uv](https://docs.astral.sh/uv/)を使用します。
+Python 3.12.10付属のTcl/Tkデータを指定し、venvからもGUIを読み込めるようにしています。
 
 ## 人手で行動を記録する
 
@@ -56,9 +73,11 @@ Mac・Windowsとも、この相対配置を使用します。累積学習デー�
 ## 開発・検証
 
 ```sh
+# 開発者向け：構築済み専用venvのPythonで実行
 python -m unittest discover -s fly_activity -v
+python -m unittest discover -s . -p test_launch.py -v
 ```
 
 画面操作を確認するテストがあるため、デスクトップ環境で実行してください。
-`7個体移動解析.command` などは以前の実習動画専用の補助スクリプトです。公開していない動画・背景・解析結果を必要とするため、新しい動画には上記2アプリを使用してください。
+旧 `.command` は互換用に残しています。`7個体移動解析.command` などは以前の実習動画専用の補助スクリプトです。公開していない動画・背景・解析結果を必要とするため、新しい動画には上記2アプリを使用してください。
 `AMADEUS直接実行.command` は別途インストールしたAMADEUSと、その動画に合った設定が必要です。

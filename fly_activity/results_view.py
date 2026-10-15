@@ -8,7 +8,8 @@ import tkinter as tk
 from tkinter import ttk,messagebox
 
 import cv2
-from PIL import Image,ImageTk
+from PIL import Image
+from tk_images import photo_image
 
 LABELS={"forward":"前進","backward":"後退","stopped":"停止","lateral":"横方向等","unknown":"不明"}
 REASONS={"tracking_or_activity_unknown":"追跡または移動状態が不明", "tracking_missing":"個体の検出・対応付けが欠測",
@@ -128,7 +129,7 @@ class ImagePanel(ttk.Frame):
         w,h=self.original.size
         factor=max(120,self.canvas.winfo_width()-10)/w if self.scale.get()=="幅に合わせる" else float(self.scale.get().rstrip("%"))/100
         image=self.original.resize((max(1,round(w*factor)),max(1,round(h*factor))),Image.Resampling.LANCZOS)
-        self.photo=ImageTk.PhotoImage(image);self.canvas.delete("all")
+        self.photo=photo_image(image);self.canvas.delete("all")
         self.canvas.create_image(5,5,image=self.photo,anchor="nw")
         self.canvas.configure(scrollregion=(0,0,image.width+10,image.height+10))
 
@@ -160,7 +161,7 @@ class VideoPlayer:
         if not ok:self.pause();return
         self.frame=frame;image=Image.fromarray(cv2.cvtColor(img,cv2.COLOR_BGR2RGB))
         image.thumbnail((max(200,self.window.winfo_width()-25),max(200,self.window.winfo_height()-110)))
-        self.image.photo=ImageTk.PhotoImage(image);self.image.configure(image=self.image.photo)
+        self.image.photo=photo_image(image);self.image.configure(image=self.image.photo)
         self.position.set(frame);self.time.configure(text=f'{frame/self.fps:.2f} / {(self.frames-1)/self.fps:.2f} 秒')
 
     def seek(self):self.show(int(round(self.position.get())))

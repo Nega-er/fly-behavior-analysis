@@ -12,7 +12,8 @@ import threading
 import tkinter as tk
 from tkinter import ttk,filedialog,messagebox
 
-from PIL import Image,ImageTk
+from PIL import Image
+from tk_images import photo_image
 import cv2
 from analyze_flies import DEFAULTS,validate_config
 from video_setup import prepare_video,roi_mask
@@ -130,7 +131,7 @@ class App:
 
     def display(self,image):
         image=Image.fromarray(cv2.cvtColor(image,cv2.COLOR_BGR2RGB));image.thumbnail((850,340))
-        self.preview.photo=ImageTk.PhotoImage(image);self.preview.configure(image=self.preview.photo)
+        self.preview.photo=photo_image(image);self.preview.configure(image=self.preview.photo)
 
     def select_roi(self):
         if self.running:return

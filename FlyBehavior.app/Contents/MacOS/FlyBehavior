@@ -1,0 +1,25 @@
+#!/bin/zsh -f
+ROOT="${0:A:h}/../../.."
+ROOT="${ROOT:A}"
+choice=$(/usr/bin/osascript -e 'choose from list {"個体行動の手入力", "自動解析", "環境確認のみ"} with title "ハエ行動アプリ" with prompt "起動する機能を選択してください。初回は専用Pythonとライブラリを準備します。" default items {"個体行動の手入力"}')
+[[ "$choice" == false || -z "$choice" ]] && exit 0
+case "$choice" in
+  '個体行動の手入力') app=manual ;;
+  '自動解析') app=analysis ;;
+  *) app=check ;;
+esac
+mkdir -p "$ROOT/.runtime/logs" || exit 1
+log="$ROOT/.runtime/logs/setup-mac.log"
+# Install in the background without Terminal, sudo, Conda hooks or shell profiles.
+/bin/zsh -f "$ROOT/setup/mac.sh" --app "$app" >> "$log" 2>&1
+fly_exit_code=$?
+if [[ $fly_exit_code -ne 0 ]]; then
+  /usr/bin/osascript - "$log" <<'APPLESCRIPT'
+on run argv
+  display alert "起動準備に失敗しました" message ("診断ログ：" & item 1 of argv) as critical
+end run
+APPLESCRIPT
+elif [[ "$app" == check ]]; then
+  /usr/bin/osascript -e 'display alert "環境確認が完了しました" message "Python・Conda分離・パッケージ・Tkinter・MP4保存の確認に成功しました。"'
+fi
+exit "$fly_exit_code"
