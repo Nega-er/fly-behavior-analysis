@@ -1,0 +1,45 @@
+.venv/
+
+# Generated analysis results (learning history is shared through GitHub)
+/fly_activity/outputs/
+/fly_activity/results_*/
+/fly_activity/run_*/
+/fly_activity/direction_confirmed_*/
+/fly_activity/direction_fixed_*/
+/fly_activity/direction_reanalysis_*/
+/fly_activity/learning/*.npz
+/fly_activity/learning/migration.json
+/fly_activity/learning/*-wal
+/fly_activity/learning/*-shm
+/fly_activity/learning/*-journal
+/fly_activity/learning/.model_*.json
+
+# Local videos, generated images and machine-specific files
+*.avi
+*.mp4
+*.mov
+*.mkv
+*.m4v
+*.png
+*.jpg
+*.jpeg
+*.tif
+*.tiff
+*.bmp
+*.webp
+*.gif
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
+.env
+.env.*
+
+# AMADEUS generated output (optional legacy integration)
+/amadeus_*/main/
+/amadeus_*/segmentation/
+/amadeus_*/results/
+/amadeus_*/yolo_dataset_*/
+/amadeus_*/_autogen_*.yaml
+/amadeus_*/log.txt
+/amadeus_*/time.csv
