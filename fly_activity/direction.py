@@ -197,6 +197,7 @@ def export_direction_preview(video, out, config, progress=None):
     with (out/"activity.csv").open(encoding="utf-8-sig", newline="") as f:
         rows = list(csv.DictReader(f))
     lookup = {(int(r["frame"]), int(r["slot"])): r for r in rows}
+    slots=sorted({int(r['slot']) for r in rows})
     frames = max(int(r["frame"]) for r in rows)+1
     cap = cv2.VideoCapture(str(video))
     fps = cap.get(cv2.CAP_PROP_FPS)
@@ -214,7 +215,7 @@ def export_direction_preview(video, out, config, progress=None):
             ok, image = cap.read()
             if not ok:
                 raise ValueError(f"Direction video ends before CSV frame {frame}")
-            for slot in range(1, config["expected_flies"]+1):
+            for slot in slots:
                 row = lookup[frame,slot]
                 if not row["x_smooth_px"]:
                     continue
@@ -244,7 +245,7 @@ def export_direction_preview(video, out, config, progress=None):
         writer.release()
 
 
-def plot_direction(times, labels, out, automatic=False):
+def plot_direction(times, labels, out, automatic=False,slot_ids=None):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -255,6 +256,7 @@ def plot_direction(times, labels, out, automatic=False):
     fig, ax = plt.subplots(figsize=(13, 4), constrained_layout=True)
     mesh = ax.pcolormesh(times, np.arange(len(labels)+1)+.5, values[:, 1:],
                          cmap=ListedColormap(colors), vmin=-.5, vmax=4.5, shading="flat")
+    if slot_ids is not None:ax.set_yticks(range(1,len(labels)+1),labels=slot_ids)
     bar = fig.colorbar(mesh, ax=ax, ticks=range(5))
     bar.ax.set_yticklabels(names)
     ax.set(title="Automatic body-relative direction (appearance model)" if automatic else "Body-relative direction (manual head anchors)",

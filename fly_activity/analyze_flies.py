@@ -21,7 +21,7 @@ from movement_rate import summarize_rates,plot_rates
 from automatic_head import load_model, appearance_features, predict_probability, sha256
 from cumulative_learning import active_model_path,training_frames,motion_features,behavior_prediction
 
-DEFAULTS = dict(expected_flies=7, background_path=None, background_samples=31,
+DEFAULTS = dict(expected_flies=7, excluded_slots=[], background_path=None, background_samples=31,
                 threshold=30, blur_size=5, min_area_px=40, max_area_px=500,
                 foreground_polarity="bright",
                 arena_center_px=None, arena_radius_px=None, arena_diameter_mm=None,
@@ -48,6 +48,9 @@ def write_csv(path, rows, fields=None):
 
 
 def validate_config(c):
+    excluded=c.get('excluded_slots',[])
+    if not isinstance(excluded,list) or any(type(s) is not int or s<1 for s in excluded):
+        raise ValueError('除外IDは1以上の整数で指定してください。')
     if not isinstance(c["expected_flies"], int) or c["expected_flies"] < 1:
         raise ValueError("expected_flies must be a positive integer")
     if c["blur_size"] < 1 or c["blur_size"] % 2 != 1:
@@ -306,6 +309,11 @@ def window_speed(distance, times, window_s):
 def analyze(tracks, config, out, head_anchors=None,appearance_cache=None,behavior_model=None,progress=None):
     head_anchors = head_anchors or {}
     n = config["expected_flies"]
+    excluded=sorted(set(config.get('excluded_slots',[])))
+    if any(type(s) is not int or s<1 or s>n for s in excluded):
+        raise ValueError(f'除外IDは1〜{n}で指定してください。')
+    slots=[s for s in range(1,n+1) if s not in excluded]
+    if not slots:raise ValueError('全個体は除外できません。解析対象を1個体以上残してください。')
     by_frame = {}
     for row in tracks:
         row = dict(row)
@@ -335,8 +343,8 @@ def analyze(tracks, config, out, head_anchors=None,appearance_cache=None,behavio
     all_valid = np.zeros((n, frames), bool)
     all_directions = np.empty((n, frames), object)
     direction_summary = []
-    for slot in range(1, n + 1):
-        if progress:progress("analyze",slot-1,n,f"個体 {slot} / {n} を解析")
+    for index,slot in enumerate(slots):
+        if progress:progress("analyze",index,len(slots),f"ID {slot} を解析（{index+1} / {len(slots)}）")
         xy = np.full((frames, 2), np.nan)
         seg = np.zeros(frames, int)
         for k in range(frames):
@@ -451,6 +459,9 @@ def analyze(tracks, config, out, head_anchors=None,appearance_cache=None,behavio
                                   distance=float(np.nansum(distance[a:b])), unit=unit,
                                   left_censored=int(a == 1 or state[a-1] == "unknown"),
                                   right_censored=int(b == frames or state[b] == "unknown")))
+    indices=np.array(slots)-1
+    all_distances=all_distances[indices];all_states=all_states[indices]
+    all_valid=all_valid[indices];all_directions=all_directions[indices]
     if progress:
         progress("analyze",1,1,"行動解析完了")
         progress("save",0,1,"時間集計を作成")
@@ -461,8 +472,8 @@ def analyze(tracks, config, out, head_anchors=None,appearance_cache=None,behavio
         overlap = np.maximum(0., np.minimum(times[1:], end) - np.maximum(times[:-1], start))
         weights = np.r_[0., overlap / dt[1:]]
         interval_time = np.r_[0., overlap]
-        for slot in range(n):
-            bins.append(dict(start_s=float(start), end_s=float(end), slot=slot+1,
+        for slot,original_slot in enumerate(slots):
+            bins.append(dict(start_s=float(start), end_s=float(end), slot=original_slot,
                              distance=float(np.sum(all_distances[slot]*weights)),
                              valid_s=float(np.sum(all_valid[slot]*interval_time)),
                              moving_s=float(np.sum((all_states[slot]=="moving")*interval_time)),
@@ -472,17 +483,17 @@ def analyze(tracks, config, out, head_anchors=None,appearance_cache=None,behavio
     write_csv(out / "segments.csv", segments, ["slot", "segment", "start_s", "end_s", "observed_frames"])
     write_csv(out / "bouts.csv", bouts, ["slot", "segment", "state", "start_s", "end_s", "duration_s", "distance", "unit", "left_censored", "right_censored"])
     write_csv(out / "time_bins.csv", bins)
-    rate_rows=summarize_rates(bins,n)
+    rate_rows=summarize_rates(bins,len(slots))
     write_csv(out/"movement_rate.csv",rate_rows)
     if progress:progress("save",1,4,"移動量の図を作成")
     plot_rates(rate_rows,bins,out/"movement_rate.png")
     write_csv(out / "direction_summary.csv", direction_summary)
     measured_time = sum(s["valid_interval_s"] for s in summaries)
-    group = dict(expected_flies=n, duration_s=duration, unit=unit,
+    group = dict(expected_flies=n, analyzed_flies=len(slots),included_slots=slots,excluded_slots=excluded, duration_s=duration, unit=unit,
                  measured_distance=float(all_distances.sum()),
                  valid_fly_seconds=measured_time,
-                 possible_fly_seconds=n*duration,
-                 interval_coverage=measured_time/(n*duration),
+                 possible_fly_seconds=len(slots)*duration,
+                 interval_coverage=measured_time/(len(slots)*duration),
                  distance_per_valid_fly_second=float(all_distances.sum()/measured_time) if measured_time else None,
                  all_seven_interval_fraction=float(dt[np.all(all_valid, axis=0)].sum()/duration),
                  smoothing_window_frames=window,
@@ -493,7 +504,7 @@ def analyze(tracks, config, out, head_anchors=None,appearance_cache=None,behavio
     if progress:progress("save",2,4,"距離と移動停止の図を作成")
     plot_report(times, all_distances, all_states, summaries, group, out)
     if progress:progress("save",3,4,"前進後退の図を作成")
-    plot_direction(times, all_directions, out,
+    plot_direction(times, all_directions, out,slot_ids=slots,
                    automatic=behavior_model is not None or any(str(r["head_source"]).startswith("auto") for r in series))
     if progress:progress("save",1,1,"集計と図の保存完了")
     return group
@@ -504,8 +515,9 @@ def plot_report(times, distances, states, summaries, group, out):
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
     fig, axes = plt.subplots(2, 2, figsize=(13, 9), constrained_layout=True)
-    for i, row in enumerate(distances):
-        axes[0, 0].plot(times, np.cumsum(row), label=f'Slot {i+1}')
+    slots=[s['slot'] for s in summaries]
+    for slot, row in zip(slots,distances):
+        axes[0, 0].plot(times, np.cumsum(row), label=f'Slot {slot}')
     axes[0, 0].set(title="Cumulative measured distance (gaps excluded)", xlabel="Time (s)", ylabel=group["unit"])
     axes[0, 0].legend(ncol=2)
     code = np.array([[{"unknown": 0, "stopped": 1, "moving": 2}[v] for v in row] for row in states])
@@ -513,9 +525,11 @@ def plot_report(times, distances, states, summaries, group, out):
     mesh = axes[0, 1].pcolormesh(times, np.arange(len(states)+1)+.5, code[:, 1:],
                                   cmap=ListedColormap(["#aaaaaa", "#3878b6", "#e8952f"]), vmin=0, vmax=2, shading="flat")
     axes[0, 1].set(title="Activity: gray unknown / blue stopped / orange moving", xlabel="Time (s)", ylabel="Slot", yticks=range(1, len(states)+1))
-    axes[1, 0].bar(range(1, len(states)+1), [s["smoothed_distance"] for s in summaries])
+    axes[0,1].set_yticklabels(slots)
+    axes[1, 0].bar(slots, [s["smoothed_distance"] for s in summaries])
     axes[1, 0].set(title="Distance by display slot (identity may change)", xlabel="Slot", ylabel=group["unit"])
-    axes[1, 1].bar(range(1, len(states)+1), [s["valid_interval_s"]/group["duration_s"] for s in summaries])
+    axes[1, 1].bar(slots, [s["valid_interval_s"]/group["duration_s"] for s in summaries])
+    for ax in axes[1]:ax.set_xticks(slots)
     axes[1, 1].set(title="Valid interval coverage", xlabel="Slot", ylabel="Fraction", ylim=(0, 1.05))
     fig.suptitle(f'7-fly activity | measured {group["measured_distance"]:.1f} {group["unit"]} | coverage {group["interval_coverage"]:.1%}'.replace("7-fly", f'{len(states)}-fly'))
     fig.savefig(out / "report.png", dpi=150)
@@ -592,13 +606,21 @@ def main():
     else:
         with args.tracks.open(encoding="utf-8-sig", newline="") as f:
             tracks = list(csv.DictReader(f))
+        import shutil
+        shutil.copyfile(args.tracks,args.out/'tracks.csv')
+        features=args.tracks.parent/'appearance_features.npz'
+        if features.exists():
+            shutil.copyfile(features,args.out/features.name)
+            with np.load(features,allow_pickle=False) as data:appearance_cache=data['features']
         metadata = dict(source=str(args.tracks.resolve()), timing_source="CSV time_s")
         prior_path=args.tracks.parent/"metadata.json"
         if prior_path.exists() and not args.head_anchors:
             prior=json.loads(prior_path.read_text(encoding="utf-8"))
             if prior.get("head_mode")=="automatic_appearance":
+                if appearance_cache is not None:model=load_model(args.head_model)
                 for key in ("head_mode","head_model","head_model_sha256","video_sha256",
-                            "training_video_sha256","same_video_as_head_training","training_frame_indices"):
+                            "training_video_sha256","same_video_as_head_training","training_frame_indices",
+                            "learning_version","behavior_training_samples"):
                     if key in prior:metadata[key]=prior[key]
         if not tracks:
             parser.error("Empty tracks CSV")

@@ -9,6 +9,12 @@ on:
       - 'test_updater.py'
       - 'fly_activity/manual_behavior*.py'
       - 'fly_activity/test_manual_behavior*.py'
+      - 'fly_activity/app.py'
+      - 'fly_activity/analyze_flies.py'
+      - 'fly_activity/direction.py'
+      - 'fly_activity/results_view.py'
+      - 'fly_activity/slot_selection.py'
+      - 'fly_activity/test_slot_exclusion.py'
       - '.github/workflows/runtime.yml'
   workflow_dispatch:
 permissions:
@@ -37,6 +43,7 @@ jobs:
           /bin/zsh -f setup/mac.sh --app analysis --smoke-test
           .runtime/venvs/python-*/bin/python -m unittest test_launch test_updater -v
           .runtime/venvs/python-*/bin/python -m unittest discover -s fly_activity -p 'test_manual_behavior*.py' -v
+          .runtime/venvs/python-*/bin/python -m unittest discover -s fly_activity -p test_slot_exclusion.py -v
       - name: Windows setup, Conda isolation and GUI
         if: runner.os == 'Windows'
         shell: powershell
@@ -53,6 +60,8 @@ jobs:
           & $Python -m unittest test_launch test_updater -v
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           & $Python -m unittest discover -s fly_activity -p 'test_manual_behavior*.py' -v
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          & $Python -m unittest discover -s fly_activity -p test_slot_exclusion.py -v
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Upload runtime diagnostics
         if: always()

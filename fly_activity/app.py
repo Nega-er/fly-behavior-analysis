@@ -20,6 +20,7 @@ from video_setup import prepare_video,roi_mask
 from results_view import ResultsView,load_results
 from cumulative_learning import STORE,active_model_path
 from progress import StackedProgress,STAGES,PREFIX
+from slot_selection import parse_excluded_slots
 
 HERE=Path(__file__).resolve().parent
 
@@ -37,6 +38,7 @@ class App:
         self.learn_enabled=tk.BooleanVar(value=True);self.model_status=tk.StringVar()
         self.sampling_mode=tk.StringVar(value="学習用（優先抽出）")
         self.body_mode=tk.StringVar(value="auto");self.body_brightness=tk.StringVar(value="0");self.bin_seconds=tk.StringVar(value="1")
+        self.excluded_slots=tk.StringVar()
         self.status=tk.StringVar(value="動画を選択してください。頭側の事前クリックは不要です。")
         self.events=queue.Queue();self.running=False;self.last_result=None;self.roi=None
         self.tabs=ttk.Notebook(root);self.tabs.pack(fill="both",expand=True)
@@ -75,6 +77,11 @@ class App:
         ttk.Button(region,text="解析領域を選ぶ",command=self.select_roi).pack(side="left",padx=3)
         ttk.Button(region,text="全画面に戻す",command=self.clear_roi).pack(side="left",padx=3)
         ttk.Label(region,text="任意動画では容器内を選ぶと反射などを除外できます。面積: px² / 速度: px/s").pack(side="left",padx=8)
+        exclusion=ttk.Frame(main);exclusion.grid(row=11,column=0,columnspan=3,sticky='w',pady=4)
+        ttk.Label(exclusion,text='解析から除外するID').pack(side='left')
+        ttk.Entry(exclusion,textvariable=self.excluded_slots,width=20).pack(side='left',padx=5)
+        ttk.Label(exclusion,text='例：2,5（空欄は全個体）。解析後は結果画面でも指定できます。').pack(side='left')
+        self.results.on_exclude=self.exclude_ids
         sampling=ttk.Frame(main);sampling.grid(row=10,column=0,columnspan=3,sticky="w",pady=4)
         ttk.Label(sampling,text="人手入力の場面選択").pack(side="left",padx=4)
         ttk.Combobox(sampling,textvariable=self.sampling_mode,values=["学習用（優先抽出）","評価用（ランダム）"],state="readonly",width=23).pack(side="left",padx=5)
@@ -151,7 +158,7 @@ class App:
         self.roi=None;self.status.set("全画面を解析します。")
 
     def config(self):
-        c=dict(DEFAULTS,background_path=self.background.get() or None,
+        c=dict(DEFAULTS,excluded_slots=parse_excluded_slots(self.excluded_slots.get()),background_path=self.background.get() or None,
                foreground_polarity=self.polarity.get(),threshold=float(self.threshold.get()),
                min_area_px=float(self.min_area.get()),max_area_px=float(self.max_area.get()),
                max_speed_px_s=float(self.speed.get()),roi_rect_px=self.roi,
@@ -201,7 +208,26 @@ class App:
         c=dict(DEFAULTS,**data["config"])
         self.launch_analysis(video,c,str(c["expected_flies"]),data["folder"].parent)
 
-    def launch_analysis(self,video,c,count,parent):
+    def exclude_ids(self):
+        if self.running or self.results.data is None:return
+        data=self.results.data
+        try:
+            c=dict(DEFAULTS,**data['config'])
+            c['excluded_slots']=parse_excluded_slots(self.results.excluded_ids.get())
+            n=int(c['expected_flies'])
+            if any(s>n for s in c['excluded_slots']):raise ValueError(f'除外IDは1〜{n}で指定してください。')
+            if len(c['excluded_slots'])>=n:raise ValueError('解析対象を1個体以上残してください。')
+            tracks=data['folder']/'tracks.csv'
+            if not tracks.is_file():raise ValueError('元のtracks.csvが見つかりません。')
+            video=Path(data['metadata'].get('direction_video',data['metadata'].get('source','')))
+            if not video.is_file():raise ValueError('元動画が見つかりません。')
+            model=data['metadata'].get('head_model')
+            if model and not Path(model).is_file():raise ValueError('解析に使用したモデルが見つかりません。')
+        except (ValueError,KeyError) as error:
+            messagebox.showerror('除外IDの確認',str(error),parent=self.root);return
+        self.launch_analysis(video,c,str(n),data['folder'].parent,tracks=tracks,head_model=model)
+
+    def launch_analysis(self,video,c,count,parent,tracks=None,head_model=None):
         if self.running:return
         result=parent/(video.stem+"_"+datetime.now().strftime("%Y%m%d_%H%M%S_%f"))
         self.status.set("自動解析中です。終了後に人手評価を実行できます。")
@@ -211,6 +237,12 @@ class App:
             config_path.write_text(json.dumps(c,indent=2,ensure_ascii=False),encoding="utf-8")
             args=[sys.executable,str(HERE/"analyze_flies.py"),"--video",str(video),"--config",str(config_path),
                   "--flies",count,"--out",str(result),"--progress"]
+            if tracks:
+                args[2:4]=['--tracks',str(tracks)]
+                args.extend(['--direction-video',str(video)])
+                anchors=tracks.parent/'head_anchors_used.csv'
+                if anchors.exists():args.extend(['--head-anchors',str(anchors)])
+            if head_model:args.extend(['--head-model',str(head_model)])
             lines=[]
             with subprocess.Popen(args,text=True,stdout=subprocess.PIPE,stderr=subprocess.STDOUT,encoding="utf-8",
                                   env=dict(os.environ,PYTHONUTF8="1")) as process:
@@ -304,8 +336,10 @@ class App:
                     self.status.set(f"結果表示：{self.last_result}")
                 else:
                     self.last_result=Path(payload[1]);p=json.loads((self.last_result/"config_used.json").read_text(encoding="utf-8"))
-                    self.status.set(f"解析完了：{p['expected_flies']}個体 / {self.last_result}。人間による精度評価を実行できます。")
-                    self.display(cv2.imread(str(self.last_result/"first_frame_overlay.jpg")))
+                    group=json.loads((self.last_result/'summary_group.json').read_text(encoding='utf-8'))
+                    self.status.set(f"解析完了：{group.get('analyzed_flies',p['expected_flies'])}個体 / {self.last_result}。人間による精度評価を実行できます。")
+                    overlay=self.last_result/'first_frame_overlay.jpg'
+                    if overlay.exists():self.display(cv2.imread(str(overlay)))
                     self.load_results(self.last_result,continue_analysis=True)
         except queue.Empty:pass
         self.root.after(150,self.poll)

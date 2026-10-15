@@ -69,7 +69,7 @@ def load_results(folder,progress=None):
     if rate_image is None and (folder/"time_bins.csv").exists():
         from movement_rate import summarize_rates,plot_rates
         bins=csv_rows(folder/"time_bins.csv")
-        if bins:rate_image=plot_rates(summarize_rates(bins,int(group["expected_flies"])),bins)
+        if bins:rate_image=plot_rates(summarize_rates(bins,int(group.get('analyzed_flies',group["expected_flies"]))),bins)
     statistics=json_file(folder/"period_statistics.json")
     if not statistics:
         from period_statistics import compute_period_statistics
@@ -213,6 +213,12 @@ class ResultsView(ttk.Frame):
         ttk.Button(bar,text="動画を表示",command=self.play_video).pack(side="left")
         self.path=ttk.Label(self,text="結果未選択：解析を実行するか、結果フォルダを読み込んでください。",wraplength=870)
         self.path.pack(fill="x",padx=12,pady=4)
+        exclusion=ttk.Frame(self);exclusion.pack(fill='x',padx=12,pady=4)
+        self.excluded_ids=tk.StringVar();self.on_exclude=None
+        ttk.Label(exclusion,text='除外ID（例：2,5）').pack(side='left')
+        ttk.Entry(exclusion,textvariable=self.excluded_ids,width=18).pack(side='left',padx=5)
+        ttk.Button(exclusion,text='指定IDを除外して再集計',command=lambda:self.on_exclude() if self.on_exclude else None).pack(side='left')
+        ttk.Label(exclusion,text='空欄で全IDへ戻す。元の結果は別フォルダに保持。').pack(side='left',padx=6)
         tabs=ttk.Notebook(self);tabs.pack(fill="both",expand=True,padx=8,pady=8)
         overview=ttk.Frame(tabs);graphs=ttk.Frame(tabs);individual=ttk.Frame(tabs);quality=ttk.Frame(tabs);evaluation=ttk.Frame(tabs);identity=ttk.Frame(tabs)
         for name,frame in [("概要",overview),("グラフ",graphs),("個体別",individual),("追跡品質",quality),("ID再対応付け",identity),("精度評価",evaluation)]:tabs.add(frame,text=name)
@@ -248,7 +254,8 @@ class ResultsView(ttk.Frame):
         ttk.Label(evaluation,text="自動の不明は誤りに含めます。人が判断不能な試料は精度の分母から除外し、件数を併記します。\n人手評価は自動予測を変更しません。時間的に近い評価試料は独立した実験反復ではありません。",wraplength=850).pack(anchor="w",padx=12,pady=8)
 
     def show(self,data):
-        self.data=data;g=data["group"];m=data["metadata"];n=number(g.get("expected_flies"));duration=number(g.get("duration_s"))
+        self.data=data;g=data["group"];m=data["metadata"];n=number(g.get('analyzed_flies',g.get("expected_flies")));duration=number(g.get("duration_s"))
+        self.excluded_ids.set(','.join(map(str,g.get('excluded_slots',[]))))
         unit=g.get("unit","px");mode="自動（外見モデル）" if m.get("head_mode")=="automatic_appearance" else "頭側入力または旧形式"
         source=Path(m.get("direction_video",m.get("source","動画情報なし"))).name
         self.path.configure(text=str(data["folder"]))
@@ -259,6 +266,8 @@ class ResultsView(ttk.Frame):
                                      f"方向が不明な割合：{formatted(data['unknown_fraction'],True) if data['unknown_fraction'] is not None else '集計なし'}")
         if m.get("learning_version") is not None:
             self.overview.configure(text=self.overview.cget("text")+f"\n解析に使用した学習モデル：v{m['learning_version']}（行動教師 {m.get('behavior_training_samples',0)}件）")
+        if g.get('excluded_slots'):
+            self.overview.configure(text=self.overview.cget('text')+'\n除外ID：'+', '.join(map(str,g['excluded_slots'])))
         statistics=data.get("period_statistics",{})
         if statistics.get("status")=="ok":
             verdict="有意差あり" if statistics["omnibus_significant"] else "有意差を検出せず"
