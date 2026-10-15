@@ -1,4 +1,5 @@
 import csv
+from contextlib import closing
 import json
 import os
 from pathlib import Path
@@ -33,7 +34,7 @@ class CumulativeTests(unittest.TestCase):
             self.assertEqual((local/'models/model_000002.json').read_text(),'retained remote model')
             model=load_model(active_model_path(local));self.assertEqual(model['learning_version'],3)
             self.assertEqual(model['cumulative_labels'],2)
-            with sqlite3.connect(other.db) as db:self.assertEqual(db.execute('SELECT count(*) FROM examples').fetchone()[0],1)
+            with closing(sqlite3.connect(other.db)) as db:self.assertEqual(db.execute('SELECT count(*) FROM examples').fetchone()[0],1)
 
     def make_store(self,path):
         shutil.copyfile(HERE/"learning"/"seed_model.json",path/"seed_model.json")
@@ -87,7 +88,7 @@ class CumulativeTests(unittest.TestCase):
             ensure_store(target,legacy_dirs=[older,newer])
             self.assertEqual(sha256(active_model_path(target)),original)
             self.assertEqual(sha256(active_model_path(newer)),original)
-            with sqlite3.connect(target/"examples.sqlite3") as connection:
+            with closing(sqlite3.connect(target/"examples.sqlite3")) as connection:
                 self.assertEqual(connection.execute("SELECT COUNT(*) FROM revisions").fetchone()[0],1)
             migrated=LearningStore(target)
             migrated.update(dict(self.record(seed),human_label="stopped"))

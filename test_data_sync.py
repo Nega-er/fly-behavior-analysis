@@ -1,4 +1,5 @@
 import json
+from contextlib import closing
 from pathlib import Path
 import sqlite3
 import sys
@@ -17,7 +18,7 @@ class DataSyncTests(unittest.TestCase):
     def setUp(self):
         UpdateTests.setUp(self)
         db=self.seed/'fly_activity/learning/examples.sqlite3';db.unlink()
-        with sqlite3.connect(db) as connection:connection.execute('CREATE TABLE teacher(value TEXT)')
+        with closing(sqlite3.connect(db)) as connection,connection:connection.execute('CREATE TABLE teacher(value TEXT)')
         (db.parent/'current.json').write_text('{"version":1}')
         (db.parent/'models').mkdir();(db.parent/'models/model_000001.json').write_text('{"model":1}')
         for name in ('.gitignore','.gitattributes'):
@@ -38,7 +39,7 @@ class DataSyncTests(unittest.TestCase):
             self.result(name)
         (self.local/'app.py').write_text('unfinished source')
         db=self.local/'fly_activity/learning/examples.sqlite3'
-        with sqlite3.connect(db) as connection:connection.execute("INSERT INTO teacher VALUES ('local')")
+        with closing(sqlite3.connect(db)) as connection,connection:connection.execute("INSERT INTO teacher VALUES ('local')")
         before=db.read_bytes()
         result=self.sync();self.assertTrue(result['uploaded'],result)
         files=self.git(self.local,'ls-tree','-r','--name-only','origin/main').splitlines()
@@ -56,16 +57,16 @@ class DataSyncTests(unittest.TestCase):
 
     def test_conflicting_histories_and_sessions_retain_both_versions(self):
         for root,value in ((self.local,'local'),(self.seed,'remote')):
-            with sqlite3.connect(root/'fly_activity/learning/examples.sqlite3') as db:db.execute('INSERT INTO teacher VALUES (?)',(value,))
+            with closing(sqlite3.connect(root/'fly_activity/learning/examples.sqlite3')) as db,db:db.execute('INSERT INTO teacher VALUES (?)',(value,))
             (root/'fly_activity/learning/models/model_000001.json').write_text(json.dumps(dict(model=value)))
             (root/'fly_activity/outputs/session/session.json').write_text(json.dumps(dict(labels=value)))
         self.git(self.seed,'add','.');self.git(self.seed,'commit','-m','other PC');self.git(self.seed,'push')
         remote=self.git(self.seed,'rev-parse','HEAD')
         result=self.sync();self.assertTrue(result['uploaded'],result)
-        with sqlite3.connect(self.local/'fly_activity/learning/examples.sqlite3') as db:
+        with closing(sqlite3.connect(self.local/'fly_activity/learning/examples.sqlite3')) as db:
             self.assertEqual(db.execute('SELECT value FROM teacher').fetchall(),[('local',)])
         archive=self.local/'fly_activity/learning/imports'/remote
-        with sqlite3.connect(archive/'examples.sqlite3') as db:
+        with closing(sqlite3.connect(archive/'examples.sqlite3')) as db:
             self.assertEqual(db.execute('SELECT value FROM teacher').fetchall(),[('remote',)])
         self.assertEqual(json.loads((archive/'models/model_000001.json').read_text())['model'],'remote')
         self.assertEqual(json.loads((self.local/'fly_activity/outputs/session/session.json').read_text())['labels'],'local')
