@@ -1,10 +1,12 @@
 import subprocess
 import sys
+import importlib.util
 from pathlib import Path
 import unittest
 
 SCRIPT = r"""
-import sys,time,tempfile
+import sys,time,tempfile,faulthandler
+faulthandler.enable()
 from pathlib import Path
 from unittest.mock import patch
 sys.path.insert(0,sys.argv[1])
@@ -50,6 +52,45 @@ assert [session.label(2,k) for k in range(3)]==['forward','unknown','backward']
 app.export();root.update();assert (session.path.parent/'manual_behavior.png').exists()
 assert len(read_csv(session.path.parent/'manual_behavior.csv'))==6
 app.attach(ManualSession.load(session.path));root.update();assert app.session.label(1,0)=='groom_head'
+# The native file panel pumps Tk events too. No playback callback may decode or
+# replace an image until the panel has closed, including a cancel/reopen cycle.
+def choose_session(**options):
+    assert options['parent'] is root
+    assert app.dialog_active and not app.playing and app.job is None
+    frame=app.current_frame
+    deadline=time.monotonic()+.12
+    while time.monotonic()<deadline:root.update();time.sleep(.01)
+    app.tick()
+    assert app.current_frame==frame and app.job is None
+    return str(session.path)
+with patch('manual_behavior_app.filedialog.askopenfilename',side_effect=choose_session):
+    for _ in range(12):
+        app.open_session()
+        deadline=time.monotonic()+5
+        while app.busy and time.monotonic()<deadline:root.update();time.sleep(.01)
+        assert not app.busy and app.playing and app.job is not None
+        assert app.session.label(1,0)=='groom_head'
+with patch('manual_behavior_app.filedialog.askopenfilename',return_value=''):
+    app.open_session()
+assert app.playing and app.job is not None and not app.dialog_active
+previous=app.session;previous_cap=app.cap
+invalid=folder/'invalid.json';invalid.write_text('{}')
+with patch('manual_behavior_app.filedialog.askopenfilename',return_value=str(invalid)),patch('manual_behavior_app.messagebox.showerror') as error:
+    app.open_session()
+    deadline=time.monotonic()+5
+    while app.busy and time.monotonic()<deadline:root.update();time.sleep(.01)
+    error.assert_called_once()
+assert app.session is previous and app.cap is previous_cap and app.cap.isOpened()
+app.toggle()
+def unavailable_capture(path):
+    assert not app.playing and app.job is None
+    from unittest.mock import Mock
+    return Mock(isOpened=lambda:False)
+with patch('manual_behavior_app.cv2.VideoCapture',side_effect=unavailable_capture):
+    try:app.attach(previous)
+    except ValueError:pass
+    else:raise AssertionError('Unreadable video was accepted')
+assert app.session is previous and app.cap is previous_cap and app.cap.isOpened()
 app.tabs.select(0);app.second.set('1');app.select_interval()
 assert app.playing
 app.advance.set(False);app.record('groom_head')
@@ -80,8 +121,14 @@ app.close()
 
 class ManualGuiTests(unittest.TestCase):
     def test_manual_workflow_and_new_video_detection(self):
+        root=Path(__file__).resolve().parent.parent
+        env=None
+        if Path(sys.prefix).resolve().is_relative_to(root/'.runtime'):
+            spec=importlib.util.spec_from_file_location('runtime_manager',root/'setup/runtime_manager.py')
+            runtime=importlib.util.module_from_spec(spec);spec.loader.exec_module(runtime)
+            env=runtime.configure_tk(runtime.clean_environment(root),sys.base_prefix)
         run=subprocess.run([sys.executable,'-c',SCRIPT,str(Path(__file__).resolve().parent)],
-                           capture_output=True,text=True,timeout=40)
+                           capture_output=True,text=True,timeout=60,env=env)
         self.assertEqual(run.returncode,0,run.stdout+run.stderr)
         self.assertIn('GUI passed:',run.stdout)
 

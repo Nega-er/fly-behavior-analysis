@@ -7,6 +7,8 @@ on:
       - 'launch.py'
       - 'test_launch.py'
       - 'test_updater.py'
+      - 'fly_activity/manual_behavior*.py'
+      - 'fly_activity/test_manual_behavior*.py'
       - '.github/workflows/runtime.yml'
   workflow_dispatch:
 permissions:
@@ -34,6 +36,7 @@ jobs:
           /bin/zsh -f setup/mac.sh --app manual --smoke-test
           /bin/zsh -f setup/mac.sh --app analysis --smoke-test
           .runtime/venvs/python-*/bin/python -m unittest test_launch test_updater -v
+          .runtime/venvs/python-*/bin/python -m unittest discover -s fly_activity -p 'test_manual_behavior*.py' -v
       - name: Windows setup, Conda isolation and GUI
         if: runner.os == 'Windows'
         shell: powershell
@@ -48,6 +51,8 @@ jobs:
           & ./setup/windows.ps1 -App analysis -AppArguments @('--smoke-test')
           $Python = (Get-ChildItem .runtime/venvs/*/Scripts/python.exe | Select-Object -First 1).FullName
           & $Python -m unittest test_launch test_updater -v
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          & $Python -m unittest discover -s fly_activity -p 'test_manual_behavior*.py' -v
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Upload runtime diagnostics
         if: always()

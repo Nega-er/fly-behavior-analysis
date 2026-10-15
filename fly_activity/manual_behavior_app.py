@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Desktop manual ethogram editor using the existing fly detector."""
 import argparse
+import faulthandler
 from datetime import datetime
 import json
 from pathlib import Path
@@ -25,13 +26,14 @@ MANUAL_STAGES=(STAGES[0],STAGES[1],STAGES[-1])
 class ManualApp:
     def __init__(self,root):
         self.root=root;root.title('ハエの個体行動を人手で記録');root.geometry('1180x880')
-        self.session=None;self.cap=None;self.job=None;self.playing=False;self.busy=False;self.events=queue.Queue()
+        self.session=None;self.cap=None;self.job=None;self.playing=False;self.busy=False;self.dialog_active=False;self.events=queue.Queue()
         self.graph_canvas=None;self.current_frame=0;self.crop=None;self.roi=None
         self.video=tk.StringVar();self.count=tk.StringVar(value='auto');self.polarity=tk.StringVar(value='bright')
         self.threshold=tk.StringVar(value='30');self.minimum=tk.StringVar(value='40');self.maximum=tk.StringVar(value='500')
         self.slot=tk.StringVar();self.second=tk.StringVar(value='0');self.behavior=tk.StringVar(value='未入力')
         self.rate=tk.StringVar(value='1');self.advance=tk.BooleanVar(value=True);self.status=tk.StringVar(value='動画を検出するか、既存の追跡結果・入力を開いてください。')
-        self.interval_text=tk.StringVar();self.quality_text=tk.StringVar();self.source_text=tk.StringVar()
+        self.interval_text=tk.StringVar();self.quality_text=tk.StringVar()
+        self.source_text=tk.StringVar(value='解析済み：tracks.csvのある結果フォルダ ／ 入力の続き：session.json')
         top=ttk.Frame(root,padding=10);top.pack(fill='x')
         ttk.Label(top,text='動画').grid(row=0,column=0)
         ttk.Entry(top,textvariable=self.video,width=60).grid(row=0,column=1,columnspan=5,sticky='ew',padx=5)
@@ -100,8 +102,20 @@ class ManualApp:
 
     def choose_video(self):
         if self.busy:return
-        path=filedialog.askopenfilename(title='動画を選択',filetypes=[('動画','*.avi *.mp4 *.mov *.mkv'),('すべて','*')])
+        path=self.choose_path(filedialog.askopenfilename,title='動画を選択',filetypes=[('動画','*.avi *.mp4 *.mov *.mkv'),('すべて','*')])
         if path:self.video.set(path);self.roi=None
+
+    def choose_path(self,dialog,**options):
+        # Native file panels run a nested event loop. Do not decode or update Tk
+        # images from an outstanding playback timer while that panel is active.
+        was_playing=self.playing;self.pause();self.dialog_active=True
+        chosen=None
+        try:
+            chosen=dialog(parent=self.root,**options)
+            return chosen
+        finally:
+            self.dialog_active=False
+            if not chosen and was_playing and not self.busy:self.start_loop()
 
     def clear_roi(self):
         if not self.busy:self.roi=None;self.status.set('全画面を検出します。')
@@ -153,13 +167,17 @@ class ManualApp:
 
     def open_tracking(self):
         if self.busy:return
-        chosen=filedialog.askdirectory(title='tracks.csvのある追跡結果フォルダを選択')
+        chosen=self.choose_path(filedialog.askdirectory,title='tracks.csvのある追跡結果フォルダを選択')
         if not chosen:return
         tracking=Path(chosen);metadata={}
-        if (tracking/'metadata.json').exists():metadata=json.loads((tracking/'metadata.json').read_text(encoding='utf-8'))
+        try:
+            if not (tracking/'tracks.csv').is_file():raise ValueError('tracks.csvが入っているフォルダを選択してください。')
+            if (tracking/'metadata.json').exists():metadata=json.loads((tracking/'metadata.json').read_text(encoding='utf-8'))
+        except (OSError,ValueError) as error:
+            messagebox.showerror('追跡結果の読込み',str(error),parent=self.root);return
         video=Path(metadata.get('direction_video',metadata.get('source','')))
         if not video.is_file():
-            selected=filedialog.askopenfilename(title='この追跡結果の元動画を選択')
+            selected=self.choose_path(filedialog.askopenfilename,title='この追跡結果の元動画を選択')
             if not selected:return
             video=Path(selected)
         folder=HERE/'outputs'/('manual_'+video.stem+'_'+datetime.now().strftime('%Y%m%d_%H%M%S_%f'))
@@ -167,10 +185,11 @@ class ManualApp:
 
     def open_session(self):
         if self.busy:return
-        path=filedialog.askopenfilename(title='入力を再開するsession.jsonを選択',filetypes=[('入力データ','session.json'),('JSON','*.json')])
+        path=self.choose_path(filedialog.askopenfilename,title='入力を再開するsession.jsonを選択',filetypes=[('入力データ（session.json）','*.json')])
         if path:self.work(lambda:ManualSession.load(path))
 
     def attach(self,session):
+        self.pause()
         cap=cv2.VideoCapture(str(session.video))
         if not cap.isOpened():cap.release();raise ValueError('動画を開けません。')
         if self.cap:self.cap.release()
@@ -233,7 +252,7 @@ class ManualApp:
         return True
 
     def start_loop(self):
-        if self.playing:return
+        if self.playing or self.busy or self.dialog_active or not self.session:return
         self.playing=True;self.play_button.configure(text='一時停止')
         self.job=self.root.after(max(10,round(1000/self.session.fps/float(self.rate.get()))),self.tick)
 
@@ -244,7 +263,7 @@ class ManualApp:
 
     def tick(self):
         self.job=None
-        if not self.playing:return
+        if not self.playing or self.busy or self.dialog_active:return
         _,second=self.selected();a,b=self.session.frame_range(second)
         frame=self.current_frame+1
         if frame>=b:frame=a
@@ -336,6 +355,7 @@ class ManualApp:
 
 
 def main():
+    faulthandler.enable()
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--session',type=Path);parser.add_argument('--smoke-test',action='store_true')
     args=parser.parse_args();root=tk.Tk();app=ManualApp(root)
