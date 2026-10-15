@@ -4,7 +4,8 @@
 
 ## 起動（管理者権限・既存Python・Condaは不要）
 
-ZIPを展開し、自分が書き込めるフォルダで使ってください。Mac用とWindows用を分けています。
+自分が書き込めるフォルダで使ってください。Mac用とWindows用を分けています。
+起動時の自動更新を使う場合は、GitHub Desktop等でこのリポジトリをcloneしてください。ZIP版も起動できますが、Git管理情報がないため自動更新は行いません。
 
 | OS | 起動するもの |
 |---|---|
@@ -19,9 +20,14 @@ Macでダウンロードした未署名アプリの確認が出た場合は、OS
 
 1. 継承されたConda・別venv・PYTHONPATH等を検出し、起動する子プロセスから除外。
 2. SHA256を確認した固定版uvと、アプリ専用の **CPython 3.12.10** をローカルに用意。
-3. 専用venvを作成し、Mac・Windows共通のハッシュ付きロックファイルから依存パッケージをインストール。
-4. バージョン・依存関係・Conda非使用・Tkinter・MP4書き出しと再読込みを確認。
-5. 検証したvenvのPythonでアプリを起動。
+3. Gitが利用できるclone版では `git pull --ff-only --no-rebase --no-autostash` を実行。更新された場合は起動処理を読み直す。
+4. 専用venvを作成し、Mac・Windows共通のハッシュ付きロックファイルから依存パッケージをインストール。
+5. バージョン・依存関係・Conda非使用・Tkinter・MP4書き出しと再読込みを確認。
+6. 検証したvenvのPythonでアプリを起動。
+
+起動時の更新は現在のブランチの追跡先を使います。通信できない場合、Gitがない場合、追跡先がない場合や手元の変更と競合する場合は、現在の版で起動します。
+手元の変更の自動stash・強制上書き・マージは行いません。学習データと更新が競合する場合も保持し、統合は別途行ってください。
+更新結果は `.runtime/update_status.json` と起動ログで確認できます。
 
 不足・異なる版・importに失敗するパッケージがあれば、専用venv内で再同期します。二度目以降は作成済みの環境を再利用します。
 `sudo`、管理者として実行、システムPythonやCondaへのpipインストール、シェルの初期設定の書換えは行いません。
@@ -76,6 +82,7 @@ Mac・Windowsとも、この相対配置を使用します。累積学習デー�
 # 開発者向け：構築済み専用venvのPythonで実行
 python -m unittest discover -s fly_activity -v
 python -m unittest discover -s . -p test_launch.py -v
+python -m unittest discover -s . -p test_updater.py -v
 ```
 
 画面操作を確認するテストがあるため、デスクトップ環境で実行してください。

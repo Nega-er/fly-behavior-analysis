@@ -7,7 +7,8 @@ if [[ "${FLY_CLEAN_RUNTIME:-}" != 1 ]]; then
   if [[ -n "${CONDA_PREFIX:-}${CONDA_DEFAULT_ENV:-}" ]] || [[ "${CONDA_SHLVL:-0}" == <-> && "${CONDA_SHLVL:-0}" -gt 0 ]]; then conda_detected=1; fi
   exec /usr/bin/env -i HOME="$HOME" USER="${USER:-}" LOGNAME="${LOGNAME:-}" \
     PATH=/usr/bin:/bin:/usr/sbin:/sbin TMPDIR="${TMPDIR:-/tmp}" LANG=en_US.UTF-8 \
-    FLY_CLEAN_RUNTIME=1 FLY_CONDA_DETECTED="$conda_detected" /bin/zsh -f "$0" "$@"
+    FLY_CLEAN_RUNTIME=1 FLY_CONDA_DETECTED="$conda_detected" FLY_UPDATE_DONE="${FLY_UPDATE_DONE:-}" \
+    /bin/zsh -f "$0" "$@"
 fi
 mkdir -p "$ROOT/.runtime/logs" "$ROOT/.runtime/tools" "$ROOT/.runtime/cache"
 export UV_PYTHON_INSTALL_DIR="$ROOT/.runtime/python"

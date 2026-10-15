@@ -1,9 +1,12 @@
 import importlib.util
 import json
+import os
 from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
+from types import SimpleNamespace
+import sys
 
 import launch
 
@@ -12,6 +15,16 @@ runtime=importlib.util.module_from_spec(SPEC);SPEC.loader.exec_module(runtime)
 
 
 class LaunchTests(unittest.TestCase):
+    def test_pulled_update_restarts_os_bootstrap_before_environment_setup(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder)
+            updater=SimpleNamespace(update_repository=lambda root:dict(status='updated'))
+            with patch.object(runtime,'ROOT',root),patch.object(sys,'argv',['runtime_manager.py','--uv','/uv','--app','manual','--smoke-test']),patch.dict(sys.modules,updater=updater),patch.dict(os.environ,FLY_UPDATE_DONE=''),patch.object(runtime,'ensure_environment') as ensure,patch.object(runtime.subprocess,'call',return_value=0) as call:
+                self.assertEqual(runtime.main(),0)
+            ensure.assert_not_called()
+            self.assertIn('--smoke-test',call.call_args.args[0])
+            self.assertEqual(call.call_args.kwargs['env']['FLY_UPDATE_DONE'],'1')
+
     def tree(self,folder):
         root=Path(folder).resolve();setup=root/'setup';setup.mkdir()
         (setup/'runtime-lock.json').write_text(json.dumps(dict(python_version='3.12.10')))

@@ -6,6 +6,7 @@ on:
       - 'FlyBehavior.app/**'
       - 'launch.py'
       - 'test_launch.py'
+      - 'test_updater.py'
       - '.github/workflows/runtime.yml'
   workflow_dispatch:
 permissions:
@@ -32,6 +33,7 @@ jobs:
           /bin/zsh -f setup/mac.sh --app check
           /bin/zsh -f setup/mac.sh --app manual --smoke-test
           /bin/zsh -f setup/mac.sh --app analysis --smoke-test
+          .runtime/venvs/python-*/bin/python -m unittest test_launch test_updater -v
       - name: Windows setup, Conda isolation and GUI
         if: runner.os == 'Windows'
         shell: powershell
@@ -44,6 +46,9 @@ jobs:
           & ./setup/windows.ps1 -App check
           & ./setup/windows.ps1 -App manual -AppArguments @('--smoke-test')
           & ./setup/windows.ps1 -App analysis -AppArguments @('--smoke-test')
+          $Python = (Get-ChildItem .runtime/venvs/*/Scripts/python.exe | Select-Object -First 1).FullName
+          & $Python -m unittest test_launch test_updater -v
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Upload runtime diagnostics
         if: always()
         uses: actions/upload-artifact@v4
@@ -51,5 +56,6 @@ jobs:
           name: diagnostics-${{ matrix.os }}
           path: |
             .runtime/diagnostics.json
+            .runtime/update_status.json
             .runtime/logs/*.log
           if-no-files-found: ignore

@@ -31,7 +31,8 @@ def clean_environment(root=ROOT,source=None):
                UV_PYTHON_BIN_DIR=str(runtime/'tools'),UV_NO_MODIFY_PATH='1',UV_SYSTEM_CERTS='true',
                PYTHONUTF8='1',PYTHONNOUSERSITE='1',MPLCONFIGDIR=str(runtime/'matplotlib'))
     if os.name=='nt':
-        system=env.get('SystemRoot',r'C:\Windows');env['PATH']=system+r'\System32;'+system
+        system=env.get('SystemRoot',r'C:\Windows')
+        env['PATH']=system+r'\System32;'+system+r'\System32\WindowsPowerShell\v1.0;'+system
     else:env['PATH']='/usr/bin:/bin:/usr/sbin:/sbin'
     return env
 
@@ -183,7 +184,17 @@ def main():
         return subprocess.call([sys.executable,str(ROOT/'fly_activity'/APPS[args.app]),*extra],env=os.environ.copy(),cwd=ROOT)
     if not args.uv:raise RuntimeError('OS別の起動ファイルから実行してください。')
     with setup_lock(ROOT/'.runtime/setup.lock'):
-        python,env,_=ensure_environment(args.uv)
+        updated=False
+        if os.environ.get('FLY_UPDATE_DONE')!='1':
+            from updater import update_repository
+            updated=update_repository(ROOT)['status']=='updated'
+        if not updated:python,env,_=ensure_environment(args.uv)
+    if updated:
+        # Reload the OS bootstrap as well: the update may change Python or uv pins.
+        sys.path.insert(0,str(ROOT))
+        from launch import command
+        env=clean_environment();env['FLY_UPDATE_DONE']='1'
+        return subprocess.call(command(args.app,extra,ROOT),env=env,cwd=ROOT)
     return subprocess.call([str(python),str(Path(__file__).resolve()),'--verified','--app',args.app,*extra],env=env,cwd=ROOT)
 
 
