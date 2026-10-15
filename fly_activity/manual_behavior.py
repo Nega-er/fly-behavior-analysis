@@ -16,9 +16,9 @@ from cumulative_learning import atomic_json
 from evaluate import read_csv,save_csv
 
 BEHAVIORS={"groom_head":"グルーミング頭","groom_body":"グルーミング体","stopped":"停止",
-           "forward":"前進","backward":"後退","unknown":"Unknown","":"未入力"}
+           "forward":"前進","backward":"後退","flying":"飛んでいる","unknown":"Unknown","":"未入力"}
 COLORS={"groom_head":"#e6a23c","groom_body":"#b47ac7","stopped":"#5095c5","forward":"#57a773",
-        "backward":"#dc6666","unknown":"#89929f","":"#e7e9ed"}
+        "backward":"#dc6666","flying":"#24a5a8","unknown":"#89929f","":"#e7e9ed"}
 
 
 def digest(path):

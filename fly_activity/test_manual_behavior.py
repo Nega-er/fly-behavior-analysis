@@ -30,6 +30,20 @@ def fixture(folder):
 
 
 class ManualBehaviorTests(unittest.TestCase):
+    def test_flying_survives_resume_csv_and_duration_graph(self):
+        with tempfile.TemporaryDirectory() as directory:
+            session=fixture(Path(directory));session.set_label(1,2,'flying')
+            loaded=ManualSession.load(session.path)
+            self.assertEqual(loaded.label(1,2),'flying')
+            folder=loaded.export()
+            row=next(row for row in read_csv(folder/'manual_behavior.csv') if row['slot']=='1' and row['start_s']=='2')
+            self.assertEqual(row['behavior'],'flying')
+            self.assertEqual(row['behavior_label'],'飛んでいる')
+            self.assertEqual(float(row['duration_s']),.5)
+            summary=next(row for row in read_csv(folder/'manual_behavior_summary.csv') if row['slot']=='1' and row['behavior']=='flying')
+            self.assertEqual(float(summary['duration_s']),.5)
+            self.assertGreater((folder/'manual_behavior.png').stat().st_size,1000)
+
     def test_all_behaviors_resume_and_partial_second_exports(self):
         with tempfile.TemporaryDirectory() as directory:
             folder=Path(directory);session=fixture(folder)

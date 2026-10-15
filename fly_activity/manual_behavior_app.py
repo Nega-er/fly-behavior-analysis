@@ -79,7 +79,7 @@ class ManualApp:
         self.behavior_combo.pack(side='left');self.behavior_combo.bind('<<ComboboxSelected>>',lambda e:self.record())
         ttk.Checkbutton(labels,text='選択後に次の秒へ',variable=self.advance).pack(side='left',padx=8)
         shortcuts=ttk.Frame(editor);shortcuts.pack(fill='x',pady=3)
-        for index,(value,title) in enumerate(list(BEHAVIORS.items())[:5],1):
+        for index,(value,title) in enumerate(((key,title) for key,title in BEHAVIORS.items() if key not in ('unknown','')),1):
             ttk.Button(shortcuts,text=f'{title} {index}',command=lambda v=value:self.record(v)).pack(side='left',padx=2)
             root.bind(str(index),lambda e,v=value:self.shortcut(e,v))
         ttk.Button(shortcuts,text='Unknown U',command=lambda:self.record('unknown')).pack(side='left',padx=2)

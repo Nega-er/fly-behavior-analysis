@@ -20,6 +20,17 @@ root.report_callback_exception=lambda kind,value,trace:errors.append(str(value))
 root.update();app.attach(session);root.update()
 assert list(app.slot_combo.cget('values'))==['1','2']
 assert app.playing and app.job is not None
+def widgets(parent):
+    for child in parent.winfo_children():
+        yield child
+        yield from widgets(child)
+app.advance.set(False)
+flying_button=next(widget for widget in widgets(root) if isinstance(widget,ttk.Button) and widget.cget('text')=='飛んでいる 6')
+flying_button.invoke();root.update()
+assert session.label(1,0)=='flying' and app.behavior.get()=='飛んでいる'
+assert ManualSession.load(session.path).label(1,0)=='flying'
+assert app.playing and app.second.get()=='0'
+app.record('');app.advance.set(True)
 deadline=time.monotonic()+2.2
 while time.monotonic()<deadline:root.update();time.sleep(.01)
 assert app.second.get()=='0' and not session.label(1,0)
