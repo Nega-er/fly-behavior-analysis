@@ -1,0 +1,16 @@
+{
+  "fps": 23.037,
+  "frames_decoded": 2025,
+  "frames_reported": 2025,
+  "timing_source": "frame/FPS (constant-frame-rate assumption)",
+  "width": 1392,
+  "height": 1040,
+  "review_frames": 635,
+  "repeated_encoded_frames": 0,
+  "identity_method": "reserved_position_appearance",
+  "identity_reacquisitions": 38,
+  "reserved_missing_id_frames": 759,
+  "above_requested_population_fraction": 0.01925925925925926,
+  "stationary_recovery_frames": 0,
+  "source": "/Users/ibuki/Desktop/実験/hae/1_female_1_1.avi"
+}
