@@ -141,7 +141,63 @@ class ManualSession:
         from matplotlib.backends.backend_agg import FigureCanvasAgg
         FigureCanvasAgg(figure)
         figure.savefig(folder/'manual_behavior.png',dpi=160,bbox_inches='tight')
+        periods=self.grooming_periods()
+        save_csv(folder/'manual_grooming_periods.csv',periods,list(periods[0]))
+        figure=grooming_period_figure(self,all_slots=True)
+        FigureCanvasAgg(figure)
+        figure.savefig(folder/'manual_grooming_periods.png',dpi=160,bbox_inches='tight')
         return folder
+
+    def grooming_periods(self):
+        """Seconds of human labels in half-open periods, including coverage."""
+        result=[]
+        for slot in self.slots:
+            for start,limit,title in ((0,30,'0〜30秒'),(30,60,'30〜60秒'),(60,self.duration,'60秒以降')):
+                end=max(start,min(limit,self.duration));totals={key:0. for key in BEHAVIORS}
+                for second in range(start,min(math.ceil(end),self.seconds)):
+                    overlap=max(0.,min(second+1,end)-max(second,start))
+                    totals[self.label(slot,second)]+=overlap
+                duration=end-start
+                result.append(dict(slot=slot,period=title,start_s=start,end_s=end,
+                    available_duration_s=duration,groom_head_s=totals['groom_head'],
+                    groom_body_s=totals['groom_body'],
+                    grooming_total_s=totals['groom_head']+totals['groom_body'],
+                    unknown_s=totals['unknown'],unlabeled_s=totals[''],
+                    assessed_s=duration-totals['unknown']-totals['']))
+        individual=list(result)
+        for index in range(3):
+            rows=individual[index::3];total=dict(rows[0],slot='all')
+            for key in ('available_duration_s','groom_head_s','groom_body_s','grooming_total_s','unknown_s','unlabeled_s','assessed_s'):
+                total[key]=sum(row[key] for row in rows)
+            # Only individual rows take part in each aggregate.
+            result.append(total)
+        return result
+
+
+def grooming_period_figure(session,slot='all',all_slots=False):
+    from matplotlib.figure import Figure
+    from matplotlib import font_manager,rc_context
+    available={font.name for font in font_manager.fontManager.ttflist}
+    font=next((name for name in ('Hiragino Sans','Yu Gothic','Meiryo','Noto Sans CJK JP','Arial Unicode MS') if name in available),'DejaVu Sans')
+    scopes=['all',*session.slots] if all_slots else [slot]
+    rows=session.grooming_periods()
+    with rc_context({'font.family':font}):
+        fig=Figure(figsize=(10,3.2*len(scopes)),layout='constrained')
+        for ax,scope in zip(fig.subplots(len(scopes),1,squeeze=False).flat,scopes):
+            values=[row for row in rows if row['slot']==scope]
+            head=[r['groom_head_s'] for r in values];body=[r['groom_body_s'] for r in values]
+            ax.bar(range(3),head,color=COLORS['groom_head'],label='頭')
+            ax.bar(range(3),body,bottom=head,color=COLORS['groom_body'],label='体')
+            for index,row in enumerate(values):
+                text=f"{row['grooming_total_s']:g}" if row['available_duration_s'] else '対象外'
+                ax.text(index,row['grooming_total_s'],text,ha='center',va='bottom')
+            ax.set(xticks=range(3),xticklabels=[r['period'] for r in values],
+                   ylabel='グルーミング時間（個体秒）' if scope=='all' else 'グルーミング時間（秒）',
+                   title='全個体合計' if scope=='all' else f'個体 {scope}',
+                   ylim=(0,max(1,max(r['grooming_total_s'] for r in values)*1.25)))
+            ax.legend(loc='upper right');ax.set_axisbelow(True);ax.grid(axis='y',alpha=.2)
+        fig.suptitle('手入力のグルーミング合計（頭＋体）／Unknown・未入力は含めない')
+        return fig
 
 
 def behavior_figure(session):

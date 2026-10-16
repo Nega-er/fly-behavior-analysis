@@ -152,7 +152,8 @@ class VideoPlayer:
         slider=ttk.Scale(controls,from_=0,to=self.frames-1,variable=self.position);slider.pack(side="left",fill="x",expand=True,padx=10)
         slider.bind("<ButtonPress-1>",lambda event:self.pause());slider.bind("<ButtonRelease-1>",lambda event:self.seek())
         self.time=ttk.Label(controls,width=22);self.time.pack(side="left")
-        ttk.Label(self.window,text="緑矢印＝頭向き、水色矢印＝変位（方向確認動画）。再生位置を指定して比較できます。").pack(pady=5)
+        caption='左：重心切出し／中央：体軸補正／右：照明補正後の差分。humanは人の判定、candidateは未検証の候補です。' if Path(path).name=='grooming_preview.mp4' else '緑矢印＝頭向き、水色矢印＝変位（方向確認動画）。再生位置を指定して比較できます。'
+        ttk.Label(self.window,text=caption,wraplength=780).pack(pady=5)
         self.window.protocol("WM_DELETE_WINDOW",self.close);self.window.update_idletasks();self.show(0)
 
     def show(self,frame,seek=True):
@@ -219,6 +220,11 @@ class ResultsView(ttk.Frame):
         ttk.Entry(exclusion,textvariable=self.excluded_ids,width=18).pack(side='left',padx=5)
         ttk.Button(exclusion,text='指定IDを除外して再集計',command=lambda:self.on_exclude() if self.on_exclude else None).pack(side='left')
         ttk.Label(exclusion,text='空欄で全IDへ戻す。元の結果は別フォルダに保持。').pack(side='left',padx=6)
+        self.on_grooming=None
+        grooming_bar=ttk.Frame(self);grooming_bar.pack(fill='x',padx=12,pady=3)
+        ttk.Button(grooming_bar,text='グルーミング試作を開く／実行',command=lambda:self.on_grooming() if self.on_grooming else None).pack(side='left',padx=4)
+        ttk.Button(grooming_bar,text='グルーミング試作を手入力と比較',command=lambda:self.on_grooming(compare=True) if self.on_grooming else None).pack(side='left',padx=4)
+        ttk.Label(grooming_bar,text='固定ルールの検証用。前進・後退の結果は保持。').pack(side='left',padx=6)
         tabs=ttk.Notebook(self);tabs.pack(fill="both",expand=True,padx=8,pady=8)
         overview=ttk.Frame(tabs);graphs=ttk.Frame(tabs);individual=ttk.Frame(tabs);quality=ttk.Frame(tabs);evaluation=ttk.Frame(tabs);identity=ttk.Frame(tabs)
         for name,frame in [("概要",overview),("グラフ",graphs),("個体別",individual),("追跡品質",quality),("ID再対応付け",identity),("精度評価",evaluation)]:tabs.add(frame,text=name)

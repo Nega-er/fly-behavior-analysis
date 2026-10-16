@@ -21,7 +21,7 @@ from movement_rate import summarize_rates,plot_rates
 from automatic_head import load_model, appearance_features, predict_probability, sha256
 from cumulative_learning import active_model_path,training_frames,motion_features,behavior_prediction
 
-DEFAULTS = dict(expected_flies=7, excluded_slots=[], background_path=None, background_samples=31,
+DEFAULTS = dict(expected_flies=7, excluded_slots=[],grooming_enabled=False, background_path=None, background_samples=31,
                 threshold=30, blur_size=5, min_area_px=40, max_area_px=500,
                 foreground_polarity="bright",
                 arena_center_px=None, arena_radius_px=None, arena_diameter_mm=None,
@@ -48,6 +48,7 @@ def write_csv(path, rows, fields=None):
 
 
 def validate_config(c):
+    if not isinstance(c.get('grooming_enabled',False),bool):raise ValueError('grooming_enabled must be boolean')
     excluded=c.get('excluded_slots',[])
     if not isinstance(excluded,list) or any(type(s) is not int or s<1 for s in excluded):
         raise ValueError('除外IDは1以上の整数で指定してください。')
@@ -651,9 +652,16 @@ def main():
                 preview_source = candidate
     if progress:progress("preview",0,1,"確認動画を作成")
     if preview_source is not None:
-        export_direction_preview(preview_source, args.out, config,progress)
+        preview_progress=(lambda stage,current,total,detail:progress(stage,current,2*total,detail)) if config.get('grooming_enabled') and progress else progress
+        export_direction_preview(preview_source, args.out, config,preview_progress)
         metadata["direction_video"] = str(preview_source.resolve())
     (args.out / "metadata.json").write_text(json.dumps(metadata, indent=2, ensure_ascii=False), encoding="utf-8")
+    if config.get('grooming_enabled'):
+        if preview_source is None:raise ValueError('グルーミング試作には元動画が必要です。')
+        from grooming import run_prototype
+        from cumulative_learning import STORE
+        run_prototype(preview_source,args.out/'tracks.csv',args.out/'grooming',excluded_slots=config.get('excluded_slots',[]),
+                      learning=STORE,progress=(lambda stage,current,total,detail:progress('preview',total+current,2*total,detail)) if progress else None)
     if progress:progress("preview",1,1,"解析結果の保存完了")
     print(json.dumps(result, indent=2, ensure_ascii=False))
 

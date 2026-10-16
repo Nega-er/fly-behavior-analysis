@@ -1,0 +1,14 @@
+{
+  "source": "/Users/ruvi/repo_tex/Exp_3A/tuji/fly_activity/outputs/6_female_2_20261016_103919_746754/tracks.csv",
+  "timing_source": "CSV time_s",
+  "head_mode": "automatic_appearance",
+  "head_model": "/Users/ruvi/repo_tex/Exp_3A/tuji/fly_activity/learning/models/model_000878.json",
+  "head_model_sha256": "924fda36ff1db046814fb976efadda0a2ff9c300ca3e424333424179faf7fe69",
+  "video_sha256": "8fcd2a1e431ca5cb096349e92ffe14b433bd8dcd2d76375d2152813022b9dbb0",
+  "training_video_sha256": "826a0ef875e222be37b04fc449121ef8df724127122df1142a69ad2e2323b42d",
+  "same_video_as_head_training": false,
+  "training_frame_indices": [],
+  "learning_version": 878,
+  "behavior_training_samples": 778,
+  "direction_video": "/Users/ruvi/repo_tex/Exp_3A/4班/6_female_2.avi"
+}
