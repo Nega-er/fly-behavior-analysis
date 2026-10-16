@@ -19,8 +19,9 @@ from analyze_flies import DEFAULTS,validate_config
 from video_setup import prepare_video,roi_mask
 from results_view import ResultsView,load_results
 from cumulative_learning import STORE,active_model_path
-from progress import StackedProgress,STAGES,PREFIX,startup_sync_status
+from progress import StackedProgress,STAGES,PREFIX
 from slot_selection import parse_excluded_slots
+from repository_sync import RepositorySync
 
 HERE=Path(__file__).resolve().parent
 
@@ -41,7 +42,7 @@ class App:
         self.excluded_slots=tk.StringVar()
         self.grooming_enabled=tk.BooleanVar(value=False)
         self.status=tk.StringVar(value="動画を選択してください。頭側の事前クリックは不要です。")
-        self.events=queue.Queue();self.running=False;self.last_result=None;self.roi=None
+        self.events=queue.Queue();self.running=False;self.last_result=None;self.roi=None;self.evaluation_process=None
         self.tabs=ttk.Notebook(root);self.tabs.pack(fill="both",expand=True)
         self.input_tab=ttk.Frame(self.tabs);self.tabs.add(self.input_tab,text="入力・解析設定")
         self.results=ResultsView(self.tabs,self.browse_results,self.refresh_results,self.evaluate,self.open_result,self.rerun_latest)
@@ -103,14 +104,33 @@ class App:
         footer.pack(fill="x",before=self.tabs)
         footer.pack_configure(side="bottom")
         self.progress=StackedProgress(footer);self.progress.pack(fill="x")
-        ttk.Label(footer,text=startup_sync_status(),wraplength=990).pack(anchor='w')
+        self.sync=RepositorySync(footer,HERE.parent,'analysis',
+            lambda:not self.running and (self.evaluation_process is None or self.evaluation_process.poll() is not None),
+            self.begin_sync,self.finish_sync,self.close,
+            lambda:('--results',str(self.last_result)) if self.last_result else ())
+        self.sync.pack(fill='x',pady=(5,0))
         ttk.Label(footer,textvariable=self.status,wraplength=990).pack(anchor="w",pady=(5,0))
         ttk.Label(main,text="自動頭尾判定は外見モデルの推定です。人手評価は自動ラベルを隠して行い、元の判定を変更しません。\n"
                             "頭側入力と人手評価を累積学習します。モデルを履歴保存し、以前の解析結果は固定します。",
                   wraplength=850).grid(row=12,column=0,columnspan=3,sticky="w",pady=5)
         ttk.Label(root,textvariable=self.model_status,wraplength=990).pack(fill="x",padx=12,pady=5)
         self.update_model_status()
+        root.protocol('WM_DELETE_WINDOW',self.close)
         root.after(150,self.poll)
+
+    def begin_sync(self):
+        for player in self.results.players:
+            if player.window.winfo_exists():player.pause()
+        self.running=True
+
+    def finish_sync(self,result):
+        self.running=bool(result.get('restart_required'))
+        if result.get('uploaded') and not self.running:self.update_model_status()
+
+    def close(self):
+        if self.sync.active:
+            self.sync.text.set('同期処理が終わってから閉じてください。');return
+        self.root.destroy()
 
     def update_model_status(self):
         try:active_model_path()
@@ -316,6 +336,7 @@ class App:
         if process.poll() is None:
             self.update_model_status()
             self.root.after(500,lambda:self.watch_evaluation(process,result));return
+        if self.evaluation_process is process:self.evaluation_process=None
         if process.returncode==0:
             self.update_model_status()
             self.status.set("人手学習・評価を保存しました。")
@@ -341,6 +362,7 @@ class App:
               "--sampling","learning" if self.sampling_mode.get()=="学習用（優先抽出）" else "random"]
         if not self.learn_enabled.get() or self.sampling_mode.get()=="評価用（ランダム）":args.append("--no-learn")
         process=subprocess.Popen(args)
+        self.evaluation_process=process
         self.root.after(500,lambda:self.watch_evaluation(process,result))
 
     def poll(self):
