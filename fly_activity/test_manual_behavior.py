@@ -8,7 +8,7 @@ import cv2
 import numpy as np
 
 from evaluate import save_csv,read_csv
-from manual_behavior import ManualSession
+from manual_behavior import ManualSession,grooming_period_figure
 
 
 def fixture(folder):
@@ -30,6 +30,41 @@ def fixture(folder):
 
 
 class ManualBehaviorTests(unittest.TestCase):
+    def test_grooming_boundaries_partial_end_and_group_totals(self):
+        with tempfile.TemporaryDirectory() as directory:
+            session=fixture(Path(directory))
+            # Aggregation uses annotation times, independently of video decoding.
+            session.duration=60.5;session.seconds=61
+            session.labels.update({'1:29':'groom_head','1:30':'groom_body',
+                                   '1:59':'groom_head','1:60':'groom_body',
+                                   '2:0':'groom_body','2:30':'unknown'})
+            rows=session.grooming_periods()
+            first=[row for row in rows if row['slot']==1]
+            self.assertEqual([r['grooming_total_s'] for r in first],[1,2,.5])
+            self.assertEqual([r['groom_head_s'] for r in first],[1,1,0])
+            self.assertEqual([r['available_duration_s'] for r in first],[30,30,.5])
+            group=[row for row in rows if row['slot']=='all']
+            self.assertEqual([r['grooming_total_s'] for r in group],[2,2,.5])
+            self.assertEqual(group[1]['unknown_s'],1)
+            self.assertEqual(group[1]['unlabeled_s'],57)
+            for row in rows:
+                self.assertAlmostEqual(row['assessed_s']+row['unknown_s']+row['unlabeled_s'],row['available_duration_s'])
+            self.assertEqual(sum(r['grooming_total_s'] for r in first),3.5)
+            figure=grooming_period_figure(session,1)
+            self.assertEqual([p.get_height() for p in figure.axes[0].patches],[1,1,0,0,1,.5])
+
+    def test_short_video_grooming_export_marks_absent_periods(self):
+        with tempfile.TemporaryDirectory() as directory:
+            session=fixture(Path(directory));session.set_label(1,2,'groom_body')
+            folder=session.export();rows=read_csv(folder/'manual_grooming_periods.csv')
+            self.assertEqual(len(rows),9)
+            own=[r for r in rows if r['slot']=='1']
+            self.assertEqual(float(own[0]['grooming_total_s']),.5)
+            self.assertEqual([float(r['available_duration_s']) for r in own],[2.5,0,0])
+            self.assertGreater((folder/'manual_grooming_periods.png').stat().st_size,1000)
+            figure=grooming_period_figure(session)
+            self.assertEqual([text.get_text() for text in figure.axes[0].texts],['0.5','対象外','対象外'])
+
     def test_flying_survives_resume_csv_and_duration_graph(self):
         with tempfile.TemporaryDirectory() as directory:
             session=fixture(Path(directory));session.set_label(1,2,'flying')

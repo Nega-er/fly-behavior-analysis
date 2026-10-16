@@ -35,7 +35,7 @@ class DataSyncTests(unittest.TestCase):
         path.write_text(content);return path
 
     def test_data_graphs_and_learning_are_uploaded_without_video_background_or_source(self):
-        for name in ('summary.csv','session.json','report.png','background.png','video.mp4','.env'):
+        for name in ('summary.csv','session.json','report.png','manual_grooming_periods.png','background.png','video.mp4','.env'):
             self.result(name)
         (self.local/'app.py').write_text('unfinished source')
         db=self.local/'fly_activity/learning/examples.sqlite3'
@@ -43,7 +43,7 @@ class DataSyncTests(unittest.TestCase):
         before=db.read_bytes()
         result=self.sync();self.assertTrue(result['uploaded'],result)
         files=self.git(self.local,'ls-tree','-r','--name-only','origin/main').splitlines()
-        for name in ('summary.csv','session.json','report.png'):self.assertIn('fly_activity/outputs/local/'+name,files)
+        for name in ('summary.csv','session.json','report.png','manual_grooming_periods.png'):self.assertIn('fly_activity/outputs/local/'+name,files)
         for name in ('background.png','video.mp4','.env'):self.assertNotIn('fly_activity/outputs/local/'+name,files)
         self.assertEqual(self.git(self.local,'show','origin/main:app.py'),'old')
         self.assertEqual((self.local/'app.py').read_text(),'unfinished source')
@@ -99,6 +99,7 @@ class DataSyncTests(unittest.TestCase):
 
     def test_sharing_scope(self):
         for path in ('fly_activity/outputs/a/report.png','fly_activity/outputs/a/grooming_report.png','fly_activity/outputs/a/session.json',
+                     'fly_activity/outputs/a/manual_grooming_periods.png',
                      'fly_activity/results_old/activity.csv','fly_activity/learning/models/model_000123.json'):
             self.assertTrue(shared_path(path),path)
         for path in ('fly_activity/app.py','fly_activity/outputs/a/background.png',

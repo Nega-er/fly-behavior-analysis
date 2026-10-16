@@ -16,7 +16,7 @@ from tk_images import photo_image
 
 from analyze_flies import DEFAULTS,validate_config,track_video
 from video_setup import prepare_video
-from manual_behavior import ManualSession,BEHAVIORS,behavior_figure
+from manual_behavior import ManualSession,BEHAVIORS,behavior_figure,grooming_period_figure
 from progress import StackedProgress,STAGES,startup_sync_status
 
 HERE=Path(__file__).resolve().parent
@@ -99,7 +99,19 @@ class ManualApp:
         self.table.pack(side='left',fill='x',expand=True);scrollbar.pack(side='right',fill='y')
         self.table.bind('<Double-1>',self.table_select)
         ttk.Button(self.graph_tab,text='グラフを更新',command=self.show_graph).pack(anchor='w',pady=4)
-        self.tabs.bind('<<NotebookTabChanged>>',lambda e:self.show_graph() if self.tabs.select()==str(self.graph_tab) else None)
+        self.grooming_tab=ttk.Frame(self.tabs);self.tabs.add(self.grooming_tab,text='3区間のグルーミング')
+        self.grooming_scope=tk.StringVar(value='全個体合計');self.grooming_canvas=None
+        toolbar=ttk.Frame(self.grooming_tab);toolbar.pack(fill='x',pady=4)
+        ttk.Label(toolbar,text='集計対象').pack(side='left',padx=4)
+        self.grooming_combo=ttk.Combobox(toolbar,textvariable=self.grooming_scope,state='readonly',width=18)
+        self.grooming_combo.pack(side='left');self.grooming_combo.bind('<<ComboboxSelected>>',lambda e:self.show_grooming())
+        ttk.Button(toolbar,text='集計を更新',command=self.show_grooming).pack(side='left',padx=8)
+        ttk.Label(self.grooming_tab,text='頭＋体の合計。全個体合計は個体秒（各個体の秒数の和）。Unknown・未入力は合計に含めません。').pack(anchor='w')
+        self.grooming_table=ttk.Treeview(self.grooming_tab,columns=('period','head','body','total','unknown','unlabeled'),show='headings',height=3)
+        for key,title in [('period','区間'),('head','頭'),('body','体'),('total','合計'),('unknown','Unknown'),('unlabeled','未入力')]:
+            self.grooming_table.heading(key,text=title);self.grooming_table.column(key,width=130,anchor='center')
+        self.grooming_table.pack(fill='x',pady=8)
+        self.tabs.bind('<<NotebookTabChanged>>',self.summary_tab_changed)
         root.protocol('WM_DELETE_WINDOW',self.close);root.after(100,self.poll)
 
     def choose_video(self):
@@ -323,6 +335,35 @@ class ManualApp:
     def table_select(self,event):
         item=self.table.identify_row(event.y)
         if item:self.second.set(item);self.select_interval()
+
+    def summary_tab_changed(self,event=None):
+        if self.tabs.select()==str(self.graph_tab):self.show_graph()
+        elif self.tabs.select()==str(self.grooming_tab):self.show_grooming()
+
+    def show_grooming(self):
+        if not self.session:return
+        choices=['全個体合計',*[f'個体 {slot}' for slot in self.session.slots]]
+        self.grooming_combo.configure(values=choices)
+        if self.grooming_scope.get() not in choices:self.grooming_scope.set(choices[0])
+        scope='all' if self.grooming_scope.get()==choices[0] else int(self.grooming_scope.get().split()[-1])
+        unit='個体秒' if scope=='all' else '秒'
+        for key,title in [('head','頭'),('body','体'),('total','合計'),('unknown','Unknown'),('unlabeled','未入力')]:
+            self.grooming_table.heading(key,text=f'{title}（{unit}）')
+        self.grooming_table.delete(*self.grooming_table.get_children())
+        for row in self.session.grooming_periods():
+            if row['slot']!=scope:continue
+            values=[f"{row[key]:g}" if row['available_duration_s'] else '対象外'
+                    for key in ('groom_head_s','groom_body_s','grooming_total_s','unknown_s','unlabeled_s')]
+            self.grooming_table.insert('','end',values=[row['period'],*values])
+        from matplotlib.backends.backend_agg import FigureCanvasAgg
+        canvas=FigureCanvasAgg(grooming_period_figure(self.session,scope));canvas.draw()
+        image=Image.frombytes('RGBA',canvas.get_width_height(),canvas.buffer_rgba().tobytes())
+        image.thumbnail((max(300,self.root.winfo_width()-60),max(200,self.root.winfo_height()-400)))
+        if self.grooming_canvas:self.grooming_canvas.destroy()
+        self.grooming_canvas=ttk.Label(self.grooming_tab,anchor='center')
+        self.grooming_canvas.photo=photo_image(image)
+        self.grooming_canvas.configure(image=self.grooming_canvas.photo)
+        self.grooming_canvas.pack(fill='both',expand=True)
 
     def show_graph(self):
         if not self.session:return

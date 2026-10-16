@@ -51,6 +51,16 @@ app.record('forward');app.record('unknown');app.record('backward')
 assert [session.label(2,k) for k in range(3)]==['forward','unknown','backward']
 app.export();root.update();assert (session.path.parent/'manual_behavior.png').exists()
 assert len(read_csv(session.path.parent/'manual_behavior.csv'))==6
+app.tabs.select(app.grooming_tab);root.update()
+assert len(app.grooming_table.get_children())==3 and app.grooming_canvas is not None
+values=app.grooming_table.item(app.grooming_table.get_children()[0],'values')
+assert values[1:]==('1','1','2','1','0'),values
+assert app.grooming_table.item(app.grooming_table.get_children()[1],'values')[1]=='対象外'
+app.grooming_scope.set('個体 1');app.grooming_combo.event_generate('<<ComboboxSelected>>');root.update()
+values=app.grooming_table.item(app.grooming_table.get_children()[0],'values')
+assert values[1:]==('1','1','2','0','0'),values
+assert (session.path.parent/'manual_grooming_periods.png').exists()
+assert len(read_csv(session.path.parent/'manual_grooming_periods.csv'))==9
 app.attach(ManualSession.load(session.path));root.update();assert app.session.label(1,0)=='groom_head'
 # The native file panel pumps Tk events too. No playback callback may decode or
 # replace an image until the panel has closed, including a cancel/reopen cycle.

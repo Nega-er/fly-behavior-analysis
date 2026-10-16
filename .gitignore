@@ -27,6 +27,7 @@
 !/fly_activity/**/direction_report.png
 !/fly_activity/**/movement_rate.png
 !/fly_activity/**/manual_behavior.png
+!/fly_activity/**/manual_grooming_periods.png
 !/fly_activity/**/grooming_report.png
 .DS_Store
 Thumbs.db
