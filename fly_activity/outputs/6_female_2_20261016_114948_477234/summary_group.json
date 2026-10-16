@@ -1,0 +1,30 @@
+{
+  "expected_flies": 12,
+  "analyzed_flies": 10,
+  "included_slots": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "excluded_slots": [
+    1,
+    12
+  ],
+  "duration_s": 88.16252116160959,
+  "unit": "px",
+  "measured_distance": 13946.377876455908,
+  "valid_fly_seconds": 869.2538090897253,
+  "possible_fly_seconds": 881.6252116160958,
+  "interval_coverage": 0.9859675036927623,
+  "distance_per_valid_fly_second": 16.044080256674892,
+  "all_seven_interval_fraction": 0.9079271294928607,
+  "smoothing_window_frames": 3,
+  "warning": "Measured distance excludes missing/ambiguous intervals; not a complete-path estimate. Slots are not verified identities across segments. Movement thresholds are provisional."
+}
