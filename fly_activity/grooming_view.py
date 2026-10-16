@@ -14,6 +14,7 @@ REASONS={'body_axis_unreliable':'体軸が不確か','body_not_resolved':'胴体
          'tracking_missing':'追跡欠測','crop_clipped':'画像端で切出し不能','background_motion':'背景・反射の動き',
          'illumination_jump':'照明の大きな変化','turning':'旋回中','locomotion_overlap':'移動との区別を保留',
          'nonspecific_motion':'動きの種類を識別できない','localized_appendage_motion_candidate':'局所的な動きが継続',
+         'one_end_appendage_motion_candidate':'体軸の片側に局所的な動き',
          'quiet_body_and_appendages':'胴体・周囲とも変化が小さい','new_tracking_segment':'追跡開始直後',
          'repeated_encoded_frame':'同じ画像の繰返し','observation_gap':'観測間隔が長い','no_observation':'観測なし',
          'insufficient_coverage':'有効な観測時間が不足','mixed_or_nonspecific_motion':'継続時間・動きの種類が未確定',
@@ -34,6 +35,8 @@ class GroomingWindow:
         text=f"正解付き {report['labeled_intervals']}区間（グルーミング {report['positive_intervals']}／非グルーミング {report['negative_intervals']}） / 判定不能 {report['unknown_predictions']}区間\n"
         text+=f"候補の適合率 {metric('precision')} / 再現率 {metric('recall')} / 判定できた割合 {metric('prediction_coverage')}。判定不能も見逃しに含みます。"
         ttk.Label(self.window,text=text,wraplength=1040).pack(anchor='w',padx=12,pady=4)
+        if report.get('evaluation_independent') is False:
+            ttk.Label(self.window,text='判定条件の改善に使った開発データとの比較です。独立した動画での精度検証は未実施です。',wraplength=1040).pack(anchor='w',padx=12)
         controls=ttk.Frame(self.window);controls.pack(fill='x',padx=12,pady=5)
         ttk.Label(controls,text='個体ID').pack(side='left')
         self.slot=tk.StringVar(value=str(self.metadata['included_slots'][0]))

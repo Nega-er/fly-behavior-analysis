@@ -235,7 +235,9 @@ class App:
         if self.running or self.results.data is None:return
         data=self.results.data
         existing=data['folder']/'grooming'
-        if not compare and (existing/'grooming_metadata.json').exists():
+        from grooming import VERSION
+        cached=(existing/'grooming_metadata.json')
+        if not compare and cached.exists() and json.loads(cached.read_text(encoding='utf-8')).get('method')==VERSION:
             from grooming_view import GroomingWindow
             self.grooming_window=GroomingWindow(self.root,existing);return
         video=Path(data['metadata'].get('direction_video',data['metadata'].get('source','')))

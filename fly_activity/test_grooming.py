@@ -11,7 +11,7 @@ import cv2
 import numpy as np
 
 from grooming import (PARAMETERS,aligned_patch,classify,run_prototype,read_rows,sha256,
-                      validation_report,body_geometry)
+                      validation_report,body_geometry,aggregate,movement_speed,REGIONS)
 
 
 def fixture(folder,moving=False):
@@ -38,6 +38,37 @@ def fixture(folder,moving=False):
 
 
 class GroomingTests(unittest.TestCase):
+    def test_one_end_motion_is_not_diluted_by_the_other_body_half(self):
+        features=dict(core_change=.02,periphery_change=.045,end_a_change=.09,end_b_change=0,
+                      illumination_step=0,background_change=0)
+        self.assertEqual(classify(features,0,0,PARAMETERS),('grooming','one_end_appendage_motion_candidate'))
+        self.assertEqual(classify(dict(features,core_change=.2),0,0,PARAMETERS)[0],'unknown')
+        self.assertEqual(classify(features,2,0,PARAMETERS)[0],'unknown')
+        self.assertEqual(classify(features,0,40,PARAMETERS)[0],'unknown')
+
+    def test_strokes_bridge_short_valid_pauses_but_not_rejected_observations(self):
+        frames=[]
+        for index in range(20):
+            positive=index%2==0
+            row=dict(slot=1,time_s=(index+1)*.05,dt_s=.05,valid=1,
+                     candidate='grooming' if positive else 'non_grooming',reason='test')
+            for name in REGIONS:
+                row[name+'_change']=.1 if positive else 0.;row[name+'_energy']=.02
+            frames.append(row)
+        row=aggregate(frames,[1],1,PARAMETERS)[0]
+        self.assertEqual(row['grooming_state'],'grooming')
+        self.assertAlmostEqual(row['longest_candidate_s'],.5) # pauses add no evidence
+        for index in range(1,20,2):frames[index]['valid']=0
+        self.assertEqual(aggregate(frames,[1],1,PARAMETERS)[0]['grooming_state'],'unknown')
+        for row in frames:row.update(valid=1,candidate='non_grooming')
+        self.assertEqual(aggregate(frames,[1],1,PARAMETERS)[0]['grooming_state'],'non_grooming')
+
+    def test_centroid_jitter_is_separated_from_sustained_walking(self):
+        jitter=[(i*.04,np.array([100+(i%2),90.])) for i in range(5)]
+        self.assertEqual(movement_speed(jitter,20),0)
+        walking=[(i*.04,np.array([100+i,90.])) for i in range(5)]
+        self.assertGreater(movement_speed(walking,20),PARAMETERS['max_speed_body_lengths_s'])
+
     def test_body_core_geometry_excludes_dim_reflection_and_supports_dark_flies(self):
         patch=np.zeros((72,72),np.uint8)
         cv2.line(patch,(0,36),(71,36),90,2);cv2.ellipse(patch,(36,36),(10,4),0,0,360,220,-1)
@@ -72,7 +103,8 @@ class GroomingTests(unittest.TestCase):
             self.assertEqual([r['grooming_state'] for r in rows],['grooming','non_grooming'])
             report=json.loads((out/'grooming_validation.json').read_text())
             self.assertEqual(report['labeled_intervals'],2);self.assertEqual(report['precision'],1)
-            self.assertFalse(report['trained']);self.assertFalse(report['thresholds_fitted_to_labels'])
+            self.assertFalse(report['trained']);self.assertTrue(report['thresholds_fitted_to_labels'])
+            self.assertFalse(report['evaluation_independent'])
             self.assertTrue((out/'grooming_report.png').is_file())
             cap=cv2.VideoCapture(str(out/'grooming_preview.mp4'))
             self.assertTrue(cap.read()[0]);cap.release()
@@ -133,6 +165,8 @@ class GroomingTests(unittest.TestCase):
             self.assertNotIn('grooming',[r['grooming_state'] for r in read_rows(out/'grooming_intervals.csv')])
             report=json.loads((out/'grooming_validation.json').read_text())
             self.assertEqual(report['labeled_intervals'],0);self.assertIsNone(report['precision'])
+            out=run_prototype(video,tracks,root/'short_speed_window',preview=False,parameters={'speed_window_s':.001})
+            self.assertNotIn('grooming',[r['grooming_state'] for r in read_rows(out/'grooming_intervals.csv')])
 
     def test_unknown_predictions_count_as_misses_and_human_unknown_is_excluded(self):
         report=validation_report([dict(human_grooming='grooming',grooming_state='unknown'),

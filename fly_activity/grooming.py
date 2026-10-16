@@ -18,10 +18,11 @@ PARAMETERS=dict(crop_size=72,pixel_difference=12,body_contrast=25,body_core_frac
                 max_turn_deg=18,max_speed_body_lengths_s=.5,max_frame_gap_s=.25,
                 max_illumination_step=25,max_background_change=.15,
                 quiet_fraction=.025,peripheral_fraction=.06,max_core_fraction=.10,
-                min_coverage=.6,min_grooming_fraction=.5,min_bout_s=.25)
+                min_coverage=.6,min_grooming_fraction=.35,min_bout_s=.25,max_bout_gap_s=.12,
+                localized_fraction=.09,speed_window_s=.2)
 STATES=('non_grooming','grooming','unknown')
 REGIONS=('core','periphery','end_a','end_b')
-VERSION='aligned_difference_v1_unvalidated'
+VERSION='aligned_difference_v2_unvalidated'
 
 
 def sha256(path):
@@ -104,7 +105,18 @@ def classify(features,speed,turn,p):
     if max(core,peripheral)<p['quiet_fraction']:return 'non_grooming','quiet_body_and_appendages'
     if peripheral>=p['peripheral_fraction'] and core<p['max_core_fraction'] and peripheral>1.4*core:
         return 'grooming','localized_appendage_motion_candidate'
+    local=max(features.get('end_a_change',0),features.get('end_b_change',0))
+    if (local>=p['localized_fraction'] and peripheral>=p['peripheral_fraction']/2
+            and core<p['max_core_fraction'] and local>1.4*core):
+        return 'grooming','one_end_appendage_motion_candidate'
     return 'unknown','nonspecific_motion'
+
+
+def movement_speed(positions,body_length):
+    """Net movement over a short window suppresses centroid jitter from strokes."""
+    if len(positions)<2:return 0.
+    start,first=positions[0];end,last=positions[-1]
+    return float(np.linalg.norm(last-first)/(body_length*(end-start)))
 
 
 def aggregate(frames,slots,duration,p,labels=None):
@@ -123,12 +135,19 @@ def aggregate(frames,slots,duration,p,labels=None):
             valid=sum(dt for row,dt in items if row['valid'])
             positive=sum(dt for row,dt in items if row['valid'] and row['candidate']=='grooming')
             quiet=sum(dt for row,dt in items if row['valid'] and row['candidate']=='non_grooming')
-            run=longest=0.;last_end=None
+            # Leg strokes include short pauses. Bridge only measured, valid
+            # pauses; neither pauses nor rejected observations count as evidence.
+            run=longest=gap=0.;last_end=None
             for row,dt in items:
-                if row['valid'] and row['candidate']=='grooming':
-                    run=(run if last_end is not None and abs((row['time_s']-dt)-last_end)<1e-6 else 0)+dt
-                    longest=max(longest,run);last_end=row['time_s']
-                else:run=0.;last_end=None
+                start=max(second,row['time_s']-row['dt_s'])
+                if last_end is not None and abs(start-last_end)>1e-6:run=gap=0.
+                last_end=min(second+1,row['time_s'])
+                if not row['valid']:run=gap=0.
+                elif row['candidate']=='grooming':
+                    run+=dt;gap=0.;longest=max(longest,run)
+                else:
+                    gap+=dt
+                    if gap>p['max_bout_gap_s']:run=0.
             state='unknown';reason='insufficient_coverage'
             if valid/span>=p['min_coverage']:
                 if positive/valid>=p['min_grooming_fraction'] and longest>=p['min_bout_s']:
@@ -158,14 +177,14 @@ def validation_report(intervals):
     count=Counter((r['human_grooming'],r['grooming_state']) for r in labeled)
     tp=count['grooming','grooming'];fp=count['non_grooming','grooming']
     positives=sum(r['human_grooming']=='grooming' for r in labeled)
-    return dict(method=VERSION,trained=False,thresholds_fitted_to_labels=False,labeled_intervals=len(labeled),
+    return dict(method=VERSION,trained=False,thresholds_fitted_to_labels=True,evaluation_independent=False,labeled_intervals=len(labeled),
                 positive_intervals=positives,negative_intervals=len(labeled)-positives,
                 unknown_predictions=sum(r['grooming_state']=='unknown' for r in labeled),
                 precision=tp/(tp+fp) if tp+fp else None,recall=tp/positives if positives else None,
                 accuracy_including_unknown_as_error=sum(r['grooming_state']==r['human_grooming'] for r in labeled)/len(labeled) if labeled else None,
                 prediction_coverage=sum(r['grooming_state']!='unknown' for r in labeled)/len(labeled) if labeled else None,
                 confusion=[dict(human=a,predicted=b,count=count[a,b]) for a in STATES[:2] for b in STATES],
-                note='Unvalidated rule prototype. Unknown predictions count as misses; unlabeled/human Unknown are excluded. Head/body are not predicted.')
+                note='Unvalidated rule prototype revised using development labels; not an independent accuracy estimate. Unknown predictions count as misses; unlabeled/human Unknown are excluded. Head/body are not predicted.')
 
 
 def save_comparison_examples(intervals,provenance,learning):
@@ -223,7 +242,7 @@ def run_prototype(video,tracks,out,manual_session=None,excluded_slots=(),paramet
     p=dict(PARAMETERS,**(parameters or {}))
     if set(p)!=set(PARAMETERS) or any(not math.isfinite(float(v)) or v<=0 for v in p.values()):raise ValueError('画像差分パラメータが不正です。')
     if int(p['crop_size'])!=p['crop_size'] or p['crop_size']<24 or p['crop_size']>256:raise ValueError('切出しサイズは24〜256の整数です。')
-    if any(p[k]>1 for k in ('quiet_fraction','peripheral_fraction','max_core_fraction','min_coverage','min_grooming_fraction','max_background_change','body_core_fraction')):
+    if any(p[k]>1 for k in ('quiet_fraction','peripheral_fraction','localized_fraction','max_core_fraction','min_coverage','min_grooming_fraction','max_background_change','body_core_fraction')):
         raise ValueError('割合のパラメータは0より大きく1以下です。')
     if p['quiet_fraction']>=p['peripheral_fraction']:raise ValueError('静止判定の閾値はグルーミング候補より小さくしてください。')
     video_hash=sha256(video);tracks_hash=sha256(tracks);labels={};manual_hash=None
@@ -263,7 +282,7 @@ def run_prototype(video,tracks,out,manual_session=None,excluded_slots=(),paramet
             last_gray=gray
             for slot in slots:
                 row=lookup[frame,slot];record=dict(frame=frame,time_s=time,slot=slot,dt_s=0.,valid=0,candidate='unknown',reason='tracking_missing',
-                                                  speed_body_lengths_s='',turn_deg='',illumination_step='',background_change='',body_length_px='',body_width_px='',alignment_reliable=0,
+                                                  speed_body_lengths_s='',instant_speed_body_lengths_s='',turn_deg='',illumination_step='',background_change='',body_length_px='',body_width_px='',alignment_reliable=0,
                                                   tracking_image_updated=str(row.get('image_updated','1')),decoded_repeat=int(decoded_repeat))
                 for name in REGIONS:record.update({name+'_change':'',name+'_energy':''})
                 patch=raw_patch=diff=None
@@ -293,17 +312,22 @@ def run_prototype(video,tracks,out,manual_session=None,excluded_slots=(),paramet
                     if str(row.get('image_updated','1')).lower() in ('0','false') and decoded_repeat:
                         record['reason']='repeated_encoded_frame'
                     else:
-                        previous[slot]=dict(patch=patch,axis=axis,center=center,time=time,segment=row['segment'],reliable=reliable)
+                        continuous=old is not None and old['segment']==row['segment'] and time-old['time']<=p['max_frame_gap_s']
+                        positions=[(t,c) for t,c in old['positions'] if t>=time-p['speed_window_s']] if continuous else []
+                        if continuous and not positions:positions=[old['positions'][-1]]
+                        positions.append((time,center.copy()))
+                        previous[slot]=dict(patch=patch,axis=axis,center=center,time=time,segment=row['segment'],reliable=reliable,positions=positions)
                         if old is None or old['segment']!=row['segment']:record['reason']='new_tracking_segment'
                         elif time-old['time']>p['max_frame_gap_s']:record['reason']='observation_gap'
                         else:
                             dt=time-old['time'];record['dt_s']=dt
                             features,diff=difference_features(old['patch'],patch,region_masks(size,geometry),p)
-                            speed=float(np.linalg.norm(center-old['center'])/(2*geometry[0]*dt))
+                            instant_speed=float(np.linalg.norm(center-old['center'])/(2*geometry[0]*dt))
+                            speed=movement_speed(positions,2*geometry[0])
                             turn=float(np.degrees(np.arccos(np.clip(np.dot(axis,old['axis']),-1,1))))
                             state,reason=classify(features,speed,turn,p)
                             if not reliable or not old['reliable']:state,reason='unknown','body_axis_unreliable'
-                            record.update(features,speed_body_lengths_s=speed,turn_deg=turn,candidate=state,reason=reason,
+                            record.update(features,speed_body_lengths_s=speed,instant_speed_body_lengths_s=instant_speed,turn_deg=turn,candidate=state,reason=reason,
                                           valid=int(reason not in ('illumination_jump','background_motion','turning','locomotion_overlap','body_axis_unreliable')))
                 except (KeyError,TypeError,ValueError) as error:
                     previous.pop(slot,None);record['reason']=str(error)
@@ -328,6 +352,7 @@ def run_prototype(video,tracks,out,manual_session=None,excluded_slots=(),paramet
                         manual_session=str(Path(manual_session).resolve()) if manual_session else None,
                         manual_session_sha256=manual_hash,
                         parameters=p,included_slots=slots,excluded_slots=list(excluded_slots),fps=fps,frames=frames,preview_slot=preview_slot,
+                        bout_note='longest_candidate_s counts positive evidence only in a bout; short valid pauses may bridge strokes but add no evidence.',
                         region_note='End A/B are unsigned body-axis halves, not head/body labels. Locomotion results are unchanged.')
         save_rows(out/'grooming_frames.csv',records);save_rows(out/'grooming_intervals.csv',intervals)
         summary=[]

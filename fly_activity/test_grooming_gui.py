@@ -40,12 +40,17 @@ root.update()
 assert automatic.config()[0]['grooming_enabled'] is False
 automatic.grooming_enabled.set(True);assert automatic.config()[0]['grooming_enabled'] is True
 automatic.results.data=dict(folder=root_path,metadata=dict(direction_video=str(video)),group=dict(excluded_slots=[]))
+# Opening a legacy cached result must recompute with the improved detector.
+legacy=root_path/'grooming';legacy.mkdir()
+(legacy/'grooming_metadata.json').write_text(json.dumps({'method':'aligned_difference_v1_unvalidated'}))
 with patch('app.filedialog.askopenfilename',return_value=''),patch('app.HERE',root_path):
     automatic.grooming_comparison()
     deadline=time.monotonic()+30
     while automatic.running and time.monotonic()<deadline:root.update();time.sleep(.01)
 assert not automatic.running and hasattr(automatic,'grooming_window'),errors
 root.update();assert automatic.grooming_window.metadata['manual_session'] is None
+from grooming import VERSION
+assert automatic.grooming_window.metadata['method']==VERSION
 automatic.grooming_window.close();analysis_root.destroy()
 assert not errors,errors
 app.close()
