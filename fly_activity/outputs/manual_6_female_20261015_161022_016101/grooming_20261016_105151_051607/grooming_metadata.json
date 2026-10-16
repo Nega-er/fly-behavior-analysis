@@ -1,0 +1,42 @@
+{
+  "method": "aligned_difference_v1_unvalidated",
+  "video": "/Users/ruvi/repo_tex/Exp_3A/4班/6_female.avi",
+  "tracks": "/Users/ruvi/repo_tex/Exp_3A/tuji/fly_activity/outputs/manual_6_female_20261015_161022_016101/tracking/tracks.csv",
+  "video_sha256": "98372358059084fc2c033d2456df8c1b5a71c3fa8a6f862a69c72e2400a989fd",
+  "tracks_sha256": "7fe08389e7a2f1b7fa8a7b0612f79265434c7bba7385c7900321b976996485f1",
+  "manual_session": "/Users/ruvi/repo_tex/Exp_3A/tuji/fly_activity/outputs/manual_6_female_20261015_161022_016101/session.json",
+  "parameters": {
+    "crop_size": 72,
+    "pixel_difference": 12,
+    "body_contrast": 25,
+    "min_axis_ratio": 1.5,
+    "max_turn_deg": 18,
+    "max_speed_body_lengths_s": 0.5,
+    "max_frame_gap_s": 0.25,
+    "max_illumination_step": 25,
+    "max_background_change": 0.15,
+    "quiet_fraction": 0.025,
+    "peripheral_fraction": 0.06,
+    "max_core_fraction": 0.1,
+    "min_coverage": 0.6,
+    "min_grooming_fraction": 0.5,
+    "min_bout_s": 0.25
+  },
+  "included_slots": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "excluded_slots": [],
+  "fps": 23.037,
+  "frames": 2075,
+  "preview_slot": 1,
+  "region_note": "End A/B are unsigned body-axis halves, not head/body labels. Locomotion results are unchanged.",
+  "comparison_examples_added": 2
+}

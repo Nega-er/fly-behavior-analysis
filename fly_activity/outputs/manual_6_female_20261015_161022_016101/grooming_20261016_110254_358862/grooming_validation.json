@@ -1,0 +1,46 @@
+{
+  "method": "aligned_difference_v1_unvalidated",
+  "trained": false,
+  "thresholds_fitted_to_labels": false,
+  "labeled_intervals": 2,
+  "positive_intervals": 1,
+  "negative_intervals": 1,
+  "unknown_predictions": 2,
+  "precision": null,
+  "recall": 0.0,
+  "accuracy_including_unknown_as_error": 0.0,
+  "prediction_coverage": 0.0,
+  "confusion": [
+    {
+      "human": "non_grooming",
+      "predicted": "non_grooming",
+      "count": 0
+    },
+    {
+      "human": "non_grooming",
+      "predicted": "grooming",
+      "count": 0
+    },
+    {
+      "human": "non_grooming",
+      "predicted": "unknown",
+      "count": 1
+    },
+    {
+      "human": "grooming",
+      "predicted": "non_grooming",
+      "count": 0
+    },
+    {
+      "human": "grooming",
+      "predicted": "grooming",
+      "count": 0
+    },
+    {
+      "human": "grooming",
+      "predicted": "unknown",
+      "count": 1
+    }
+  ],
+  "note": "Unvalidated rule prototype. Unknown predictions count as misses; unlabeled/human Unknown are excluded. Head/body are not predicted."
+}
