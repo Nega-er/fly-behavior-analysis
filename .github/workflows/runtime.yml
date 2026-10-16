@@ -21,6 +21,8 @@ on:
       - 'fly_activity/slot_selection.py'
       - 'fly_activity/test_slot_exclusion.py'
       - 'fly_activity/grooming*.py'
+      - 'fly_activity/repository_sync.py'
+      - 'fly_activity/test_repository_sync*.py'
       - 'fly_activity/test_grooming*.py'
       - '.github/workflows/runtime.yml'
   workflow_dispatch:
@@ -53,6 +55,7 @@ jobs:
           .runtime/venvs/python-*/bin/python -m unittest discover -s fly_activity -p 'test_manual_behavior*.py' -v
           .runtime/venvs/python-*/bin/python -m unittest discover -s fly_activity -p test_slot_exclusion.py -v
           .runtime/venvs/python-*/bin/python -m unittest discover -s fly_activity -p 'test_grooming*.py' -v
+          .runtime/venvs/python-*/bin/python -m unittest discover -s fly_activity -p 'test_repository_sync*.py' -v
       - name: Windows setup, Conda isolation and GUI
         if: runner.os == 'Windows'
         shell: powershell
@@ -75,6 +78,8 @@ jobs:
           & $Python -m unittest discover -s fly_activity -p test_slot_exclusion.py -v
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           & $Python -m unittest discover -s fly_activity -p 'test_grooming*.py' -v
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          & $Python -m unittest discover -s fly_activity -p 'test_repository_sync*.py' -v
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Upload runtime diagnostics
         if: always()

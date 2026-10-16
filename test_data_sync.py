@@ -1,9 +1,12 @@
 import json
+import os
 from contextlib import closing
 from pathlib import Path
 import sqlite3
 import sys
 import unittest
+from unittest.mock import patch
+import subprocess
 
 sys.path.insert(0,str(Path(__file__).parent/'setup'))
 from data_sync import synchronize_repository,shared_path
@@ -33,6 +36,55 @@ class DataSyncTests(unittest.TestCase):
     def result(self,name='summary.csv',content='value\n1\n'):
         path=self.local/'fly_activity/outputs/local'/name;path.parent.mkdir(parents=True,exist_ok=True)
         path.write_text(content);return path
+
+    def test_button_fetches_and_pulls_before_adding_committing_and_pushing(self):
+        self.result();self.remote_update();commands=[];stages=[];execute=subprocess.run
+        def record(args,**options):
+            if '-C' in args:commands.append(args[args.index('-C')+2])
+            return execute(args,**options)
+        with patch('data_sync.subprocess.run',side_effect=record):
+            result=synchronize_repository(self.local,git=GIT,pull_first=True,progress=lambda stage,detail:stages.append(stage))
+        self.assertTrue(result['uploaded'],result);self.assertTrue(result['restart_required'])
+        for earlier,later in zip(('fetch','pull','add','commit'),('pull','add','commit','push')):
+            self.assertLess(commands.index(earlier),commands.index(later),commands)
+        self.assertEqual((self.local/'app.py').read_text(),'new')
+        self.assertEqual(stages[:2],['fetch','pull']);self.assertEqual(stages[-1],'push')
+
+    def test_button_pull_conflict_retains_uncommitted_annotations_without_pushing(self):
+        relative='fly_activity/outputs/session/session.json'
+        (self.local/relative).write_text('{"labels":{"1:0":"groom_head"}}')
+        before=(self.local/relative).read_bytes();head=self.git(self.local,'rev-parse','HEAD')
+        (self.seed/relative).write_text('{"labels":{"1:0":"stopped"}}')
+        self.git(self.seed,'add',relative);self.git(self.seed,'commit','-m','remote annotation');self.git(self.seed,'push')
+        result=synchronize_repository(self.local,git=GIT,pull_first=True)
+        self.assertEqual(result['status'],'failed');self.assertFalse(result['uploaded'])
+        self.assertEqual((self.local/relative).read_bytes(),before)
+        self.assertEqual(self.git(self.local,'rev-parse','HEAD'),head)
+        self.assertEqual(self.git(self.local,'ls-files','-u'),'')
+
+    def test_button_committed_conflicts_keep_both_annotation_histories(self):
+        relative='fly_activity/outputs/session/session.json'
+        for root,value in ((self.local,'local'),(self.seed,'remote')):
+            (root/relative).write_text(json.dumps(dict(labels=value)))
+            self.git(root,'add',relative);self.git(root,'commit','-m',value)
+        self.git(self.seed,'push');remote=self.git(self.seed,'rev-parse','HEAD')
+        result=synchronize_repository(self.local,git=GIT,pull_first=True)
+        self.assertTrue(result['uploaded'],result)
+        self.assertEqual(json.loads((self.local/relative).read_text())['labels'],'local')
+        saved=self.local/'fly_activity/outputs/shared_conflicts'/remote/relative
+        self.assertEqual(json.loads(saved.read_text())['labels'],'remote')
+
+    def test_button_cli_reports_results_and_respects_the_shared_runtime_lock(self):
+        from runtime_manager import setup_lock
+        command=[sys.executable,str(Path(__file__).parent/'setup/sync_now.py'),'--root',str(self.local)]
+        def execute():
+            run=subprocess.run(command,capture_output=True,text=True,encoding='utf-8',env=dict(os.environ,PYTHONIOENCODING='utf-8'),timeout=30)
+            self.assertEqual(run.returncode,0,run.stderr)
+            return json.loads(next(line[len('FLY_SYNC_RESULT '):] for line in run.stdout.splitlines() if line.startswith('FLY_SYNC_RESULT ')))
+        self.result();self.assertTrue(execute()['uploaded'])
+        with setup_lock(self.local/'.runtime/setup.lock'):
+            result=execute();self.assertEqual(result['status'],'failed')
+            self.assertIn('別のアプリ',result['detail'])
 
     def test_data_graphs_and_learning_are_uploaded_without_video_background_or_source(self):
         for name in ('summary.csv','session.json','report.png','manual_grooming_periods.png','background.png','video.mp4','.env'):

@@ -22,9 +22,11 @@ def shared_path(name):
     return result and (path.suffix in ('.csv','.json') or path.name in GRAPHS)
 
 
-def synchronize_repository(root,python=None,app_env=None,git=None):
+def synchronize_repository(root,python=None,app_env=None,git=None,pull_first=False,progress=None):
     root=Path(root).resolve();runtime=root/'.runtime';runtime.mkdir(exist_ok=True)
     result=dict(checked_utc=datetime.now(timezone.utc).isoformat(),status='skipped',detail='',uploaded=False)
+    def report(stage,detail):
+        if progress:progress(stage,detail)
     def finish(status,detail):
         result.update(status=status,detail=detail)
         print('Git sync: '+detail,flush=True)
@@ -44,6 +46,7 @@ def synchronize_repository(root,python=None,app_env=None,git=None):
         if check and p.returncode:raise RuntimeError((p.stderr+p.stdout).strip()[-3000:])
         return p
     def commit_data(message):
+        report('save','保存済みの解析結果・手入力・学習データをコミット')
         names=run('ls-files','-m','-o','--exclude-standard','-z').stdout.split('\0')
         candidates=sorted({s for s in names if s and shared_path(s) and (root/s).is_file() and not (root/s).is_symlink()})
         oversized=[s for s in candidates if (root/s).stat().st_size>=95*1024*1024]
@@ -83,11 +86,15 @@ def synchronize_repository(root,python=None,app_env=None,git=None):
             return finish('skipped','ステージ済みの変更・解決中の競合があるため同期を省略します。')
         result['previous_head']=run('rev-parse','HEAD').stdout.strip()
         before_remote=run('rev-parse','@{upstream}').stdout.strip()
-        commit_data('Save fly analysis, manual annotations and learning data')
+        if not pull_first:commit_data('Save fly analysis, manual annotations and learning data')
         remote_name=run('config','--get',f'branch.{run("branch","--show-current").stdout.strip()}.remote').stdout.strip()
+        report('fetch','GitHubの更新を確認（git fetch）')
         run('fetch',remote_name)
         remote=run('rev-parse','@{upstream}').stdout.strip()
-        merge=run('merge','--no-edit','--no-commit','@{upstream}',check=False)
+        report('pull','更新を取得・統合（git pull）' if pull_first else '取得した更新を統合')
+        merge=(run('pull','--no-rebase','--no-autostash','--no-edit','--no-commit',check=False) if pull_first
+               else run('merge','--no-edit','--no-commit','@{upstream}',check=False))
+        if pull_first:remote=run('rev-parse','@{upstream}').stdout.strip()
         if merge.returncode:
             conflicts=run('diff','--name-only','--diff-filter=U','-z').stdout.split('\0')
             conflicts=[p for p in conflicts if p]
@@ -106,11 +113,13 @@ def synchronize_repository(root,python=None,app_env=None,git=None):
         if merging:
             run('commit','-m','Merge shared fly data; preserve conflicting remote histories');merging=False
         result['restart_required']=before_remote!=remote or run('merge-base','--is-ancestor',remote,result['previous_head'],check=False).returncode!=0
+        if pull_first:commit_data('Save fly analysis, manual annotations and learning data')
         if python and (root/'setup/import_shared_learning.py').exists():
             imported=subprocess.run([str(python),str(root/'setup/import_shared_learning.py')],cwd=root,env=app_env,timeout=120,capture_output=True,text=True,encoding='utf-8')
             if imported.returncode:raise RuntimeError(imported.stderr[-3000:])
             if imported.stdout:print(imported.stdout,flush=True)
         commit_data('Import shared fly learning history')
+        report('push','保存済みデータを送信（git push）')
         run('push',remote_name,'HEAD:'+run('config','--get',f'branch.{run("branch","--show-current").stdout.strip()}.merge').stdout.strip())
         result['uploaded']=True;result['current_head']=run('rev-parse','HEAD').stdout.strip()
         # Restart only when incoming history changed, not for a local data commit.
@@ -120,4 +129,4 @@ def synchronize_repository(root,python=None,app_env=None,git=None):
         if merging:
             try:run('merge','--abort')
             except Exception:pass
-        return finish('failed','同期できませんでした。ローカルデータとコミットを保持して起動します。 '+str(error))
+        return finish('failed','同期できませんでした。ローカルデータとコミットは保持しています。 '+str(error))
