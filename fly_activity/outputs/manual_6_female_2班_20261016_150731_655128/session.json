@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "video": "/Users/ibuki/Desktop/実験/hae/6_female_2班.avi",
+  "tracks": "/Users/ibuki/ibuki_hae/fly-behavior-analysis/fly_activity/outputs/manual_6_female_2班_20261016_150731_655128/tracking/tracks.csv",
+  "video_sha256": "a7086f5261965df1d02f9ef3d78f640182edfaaf1454311ff71deed80be18ebf",
+  "tracks_sha256": "c1041a87f9b232cf551817b306ca29704e329f80e72b5a02cefed893f84c9446",
+  "slots": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "interval_s": 1,
+  "labels": {},
+  "history": [],
+  "fps": 23.037,
+  "frames": 2061,
+  "width": 1392,
+  "height": 1040
+}
