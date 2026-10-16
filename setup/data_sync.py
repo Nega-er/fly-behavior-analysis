@@ -9,7 +9,7 @@ import subprocess
 
 from updater import find_git
 
-GRAPHS={'report.png','direction_report.png','movement_rate.png','manual_behavior.png'}
+GRAPHS={'report.png','direction_report.png','movement_rate.png','manual_behavior.png','grooming_report.png'}
 
 
 def shared_path(name):

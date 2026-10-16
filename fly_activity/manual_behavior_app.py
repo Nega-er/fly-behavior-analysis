@@ -49,6 +49,7 @@ class ManualApp:
         links=ttk.Frame(top);links.grid(row=2,column=0,columnspan=8,sticky='w')
         for title,command in [('既存の追跡結果を使う',self.open_tracking),('入力を再開',self.open_session),('CSV・グラフを書き出す',self.export)]:
             ttk.Button(links,text=title,command=command).pack(side='left',padx=4)
+        ttk.Button(links,text='グルーミング試作と比較',command=self.grooming_comparison).pack(side='left',padx=4)
         ttk.Label(top,textvariable=self.source_text,wraplength=1100).grid(row=3,column=0,columnspan=8,sticky='w',pady=4)
         footer=ttk.Frame(root,padding=(10,5));footer.pack(side='bottom',fill='x')
         self.progress=StackedProgress(footer);self.progress.begin(MANUAL_STAGES);self.progress.pack(fill='x')
@@ -130,12 +131,12 @@ class ManualApp:
         x,y,w,h=cv2.selectROI(name,cv2.resize(image,None,fx=factor,fy=factor),showCrosshair=True);cv2.destroyWindow(name)
         if w and h:self.roi=[round(v/factor) for v in (x,y,w,h)];self.status.set(f'検出領域：{self.roi}')
 
-    def work(self,task):
+    def work(self,task,result_kind='done',stages=MANUAL_STAGES):
         if self.busy:return
-        self.pause();self.busy=True;self.progress.begin(MANUAL_STAGES)
+        self.pause();self.busy=True;self.progress.begin(stages)
         self.status.set('準備中です…')
         def run():
-            try:self.events.put(('done',task()))
+            try:self.events.put((result_kind,task()))
             except Exception as error:self.events.put(('error',str(error)))
         threading.Thread(target=run,daemon=True).start()
 
@@ -188,6 +189,14 @@ class ManualApp:
         if self.busy:return
         path=self.choose_path(filedialog.askopenfilename,title='入力を再開するsession.jsonを選択',filetypes=[('入力データ（session.json）','*.json')])
         if path:self.work(lambda:ManualSession.load(path))
+
+    def grooming_comparison(self):
+        if self.busy or not self.session:return
+        from grooming import run_prototype
+        session=self.session
+        folder=session.path.parent/('grooming_'+datetime.now().strftime('%Y%m%d_%H%M%S_%f'))
+        self.work(lambda:run_prototype(session.video,session.tracks_path,folder,session.path,
+                                       progress=self.report,learning=HERE/'learning'),result_kind='grooming_done',stages=STAGES[-1:])
 
     def attach(self,session):
         self.pause()
@@ -342,6 +351,10 @@ class ManualApp:
                 if kind=='progress':self.progress.update_progress(**payload);continue
                 self.busy=False
                 if kind=='error':self.progress.fail();messagebox.showerror('読込み・検出',payload,parent=self.root)
+                elif kind=='grooming_done':
+                    from grooming_view import GroomingWindow
+                    self.grooming_window=GroomingWindow(self.root,payload);self.progress.finish()
+                    self.status.set(f'グルーミング試作・人手比較を保存しました：{payload}')
                 else:
                     try:self.attach(payload);self.progress.finish()
                     except Exception as error:self.progress.fail();messagebox.showerror('動画を開けません',str(error),parent=self.root)

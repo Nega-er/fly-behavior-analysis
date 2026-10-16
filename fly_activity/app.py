@@ -39,6 +39,7 @@ class App:
         self.sampling_mode=tk.StringVar(value="学習用（優先抽出）")
         self.body_mode=tk.StringVar(value="auto");self.body_brightness=tk.StringVar(value="0");self.bin_seconds=tk.StringVar(value="1")
         self.excluded_slots=tk.StringVar()
+        self.grooming_enabled=tk.BooleanVar(value=False)
         self.status=tk.StringVar(value="動画を選択してください。頭側の事前クリックは不要です。")
         self.events=queue.Queue();self.running=False;self.last_result=None;self.roi=None
         self.tabs=ttk.Notebook(root);self.tabs.pack(fill="both",expand=True)
@@ -81,7 +82,9 @@ class App:
         ttk.Label(exclusion,text='解析から除外するID').pack(side='left')
         ttk.Entry(exclusion,textvariable=self.excluded_slots,width=20).pack(side='left',padx=5)
         ttk.Label(exclusion,text='例：2,5（空欄は全個体）。解析後は結果画面でも指定できます。').pack(side='left')
+        ttk.Checkbutton(exclusion,text='グルーミング試作も実行',variable=self.grooming_enabled).pack(side='left',padx=8)
         self.results.on_exclude=self.exclude_ids
+        self.results.on_grooming=self.grooming_comparison
         sampling=ttk.Frame(main);sampling.grid(row=10,column=0,columnspan=3,sticky="w",pady=4)
         ttk.Label(sampling,text="人手入力の場面選択").pack(side="left",padx=4)
         ttk.Combobox(sampling,textvariable=self.sampling_mode,values=["学習用（優先抽出）","評価用（ランダム）"],state="readonly",width=23).pack(side="left",padx=5)
@@ -159,7 +162,7 @@ class App:
         self.roi=None;self.status.set("全画面を解析します。")
 
     def config(self):
-        c=dict(DEFAULTS,excluded_slots=parse_excluded_slots(self.excluded_slots.get()),background_path=self.background.get() or None,
+        c=dict(DEFAULTS,grooming_enabled=self.grooming_enabled.get(),excluded_slots=parse_excluded_slots(self.excluded_slots.get()),background_path=self.background.get() or None,
                foreground_polarity=self.polarity.get(),threshold=float(self.threshold.get()),
                min_area_px=float(self.min_area.get()),max_area_px=float(self.max_area.get()),
                max_speed_px_s=float(self.speed.get()),roi_rect_px=self.roi,
@@ -227,6 +230,28 @@ class App:
         except (ValueError,KeyError) as error:
             messagebox.showerror('除外IDの確認',str(error),parent=self.root);return
         self.launch_analysis(video,c,str(n),data['folder'].parent,tracks=tracks,head_model=model)
+
+    def grooming_comparison(self,compare=False):
+        if self.running or self.results.data is None:return
+        data=self.results.data
+        existing=data['folder']/'grooming'
+        if not compare and (existing/'grooming_metadata.json').exists():
+            from grooming_view import GroomingWindow
+            self.grooming_window=GroomingWindow(self.root,existing);return
+        video=Path(data['metadata'].get('direction_video',data['metadata'].get('source','')))
+        tracks=data['folder']/'tracks.csv'
+        if not video.is_file() or not tracks.is_file():
+            messagebox.showerror('元データなし','元動画とtracks.csvが必要です。',parent=self.root);return
+        chosen=None
+        if compare:
+            for player in self.results.players:
+                if player.window.winfo_exists():player.pause()
+            chosen=filedialog.askopenfilename(parent=self.root,title='比較するsession.jsonを選択',filetypes=[('JSON','*.json')])
+            if not chosen:return
+        folder=data['folder']/('grooming_'+datetime.now().strftime('%Y%m%d_%H%M%S_%f'))
+        from grooming import run_prototype
+        self.start(lambda:('grooming_result',run_prototype(video,tracks,folder,chosen or None,
+                     excluded_slots=data['group'].get('excluded_slots',[]),progress=self.report_progress,learning=HERE/'learning')),STAGES[-1:])
 
     def launch_analysis(self,video,c,count,parent,tracks=None,head_model=None):
         if self.running:return
@@ -335,6 +360,10 @@ class App:
                     data=payload[1];self.last_result=data["folder"];self.results.show(data);self.tabs.select(self.results)
                     self.progress.finish()
                     self.status.set(f"結果表示：{self.last_result}")
+                elif payload[0]=='grooming_result':
+                    from grooming_view import GroomingWindow
+                    self.grooming_window=GroomingWindow(self.root,payload[1]);self.progress.finish()
+                    self.status.set(f'グルーミング試作を保存しました：{payload[1]}')
                 else:
                     self.last_result=Path(payload[1]);p=json.loads((self.last_result/"config_used.json").read_text(encoding="utf-8"))
                     group=json.loads((self.last_result/'summary_group.json').read_text(encoding='utf-8'))

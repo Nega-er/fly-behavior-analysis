@@ -98,7 +98,7 @@ class DataSyncTests(unittest.TestCase):
         self.assertEqual(self.git(self.local,'diff','--cached'),before)
 
     def test_sharing_scope(self):
-        for path in ('fly_activity/outputs/a/report.png','fly_activity/outputs/a/session.json',
+        for path in ('fly_activity/outputs/a/report.png','fly_activity/outputs/a/grooming_report.png','fly_activity/outputs/a/session.json',
                      'fly_activity/results_old/activity.csv','fly_activity/learning/models/model_000123.json'):
             self.assertTrue(shared_path(path),path)
         for path in ('fly_activity/app.py','fly_activity/outputs/a/background.png',
