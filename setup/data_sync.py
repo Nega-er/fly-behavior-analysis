@@ -92,7 +92,7 @@ def synchronize_repository(root,python=None,app_env=None,git=None,pull_first=Fal
         run('fetch',remote_name)
         remote=run('rev-parse','@{upstream}').stdout.strip()
         report('pull','更新を取得・統合（git pull）' if pull_first else '取得した更新を統合')
-        merge=(run('pull','--no-rebase','--no-autostash','--no-edit','--no-commit',check=False) if pull_first
+        merge=(run('pull','--ff','--no-rebase','--no-autostash','--no-edit','--no-commit',check=False) if pull_first
                else run('merge','--no-edit','--no-commit','@{upstream}',check=False))
         if pull_first:remote=run('rev-parse','@{upstream}').stdout.strip()
         if merge.returncode:

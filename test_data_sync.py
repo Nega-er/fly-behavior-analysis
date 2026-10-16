@@ -63,6 +63,7 @@ class DataSyncTests(unittest.TestCase):
         self.assertEqual(self.git(self.local,'ls-files','-u'),'')
 
     def test_button_committed_conflicts_keep_both_annotation_histories(self):
+        self.git(self.local,'config','pull.ff','only')
         relative='fly_activity/outputs/session/session.json'
         for root,value in ((self.local,'local'),(self.seed,'remote')):
             (root/relative).write_text(json.dumps(dict(labels=value)))
