@@ -1,0 +1,16 @@
+﻿slot,grooming_state,duration_s
+1,non_grooming,3.5081824890393705
+1,grooming,32
+1,unknown,54
+2,non_grooming,2
+2,grooming,2
+2,unknown,85.50818248903937
+3,non_grooming,0
+3,grooming,11
+3,unknown,78.50818248903937
+4,non_grooming,1
+4,grooming,40
+4,unknown,48.50818248903937
+5,non_grooming,2
+5,grooming,12
+5,unknown,75.50818248903937
