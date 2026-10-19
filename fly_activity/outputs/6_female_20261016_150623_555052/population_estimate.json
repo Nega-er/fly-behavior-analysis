@@ -1,0 +1,14 @@
+{
+  "estimated_flies": 9,
+  "modal_count": 9,
+  "modal_fraction": 1.0,
+  "selected_count_fraction": 1.0,
+  "method": "repeated_supported_upper_count",
+  "count_min": 9,
+  "count_max": 9,
+  "sample_frames": 31,
+  "histogram": {
+    "9": 31
+  },
+  "warning": "Provisional component count, not verified animal count. Contacts, stationary animals and reflections can bias it."
+}
