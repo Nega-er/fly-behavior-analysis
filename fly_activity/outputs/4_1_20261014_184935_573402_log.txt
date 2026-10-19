@@ -1,0 +1,509 @@
+FLY_PROGRESS {"stage": "prepare", "current": 0, "total": 1, "detail": "動画とモデルを準備"}
+FLY_PROGRESS {"stage": "prepare", "current": 1, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 2, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 3, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 4, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 5, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 6, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 7, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 8, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 9, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 10, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 11, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 12, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 13, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 14, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 15, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 16, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 17, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 18, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 19, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 20, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 21, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 22, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 23, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 24, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 25, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 26, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 27, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 28, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 29, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 30, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 31, "total": 63, "detail": "背景用画像を読込"}
+FLY_PROGRESS {"stage": "prepare", "current": 32, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 33, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 34, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 35, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 36, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 37, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 38, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 39, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 40, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 41, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 42, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 43, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 44, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 45, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 46, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 47, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 48, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 49, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 50, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 51, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 52, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 53, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 54, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 55, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 56, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 57, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 58, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 59, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 60, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 61, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 62, "total": 63, "detail": "個体候補を検出"}
+FLY_PROGRESS {"stage": "prepare", "current": 1, "total": 1, "detail": "個体候補数 12 を確認"}
+FLY_PROGRESS {"stage": "track", "current": 0, "total": 1, "detail": "個体の追跡を開始"}
+FLY_PROGRESS {"stage": "track", "current": 1, "total": 2251, "detail": "1 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 11, "total": 2251, "detail": "11 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 22, "total": 2251, "detail": "22 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 33, "total": 2251, "detail": "33 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 44, "total": 2251, "detail": "44 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 55, "total": 2251, "detail": "55 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 66, "total": 2251, "detail": "66 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 77, "total": 2251, "detail": "77 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 88, "total": 2251, "detail": "88 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 99, "total": 2251, "detail": "99 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 110, "total": 2251, "detail": "110 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 121, "total": 2251, "detail": "121 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 132, "total": 2251, "detail": "132 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 143, "total": 2251, "detail": "143 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 154, "total": 2251, "detail": "154 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 165, "total": 2251, "detail": "165 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 176, "total": 2251, "detail": "176 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 187, "total": 2251, "detail": "187 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 198, "total": 2251, "detail": "198 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 209, "total": 2251, "detail": "209 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 220, "total": 2251, "detail": "220 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 231, "total": 2251, "detail": "231 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 242, "total": 2251, "detail": "242 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 253, "total": 2251, "detail": "253 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 264, "total": 2251, "detail": "264 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 275, "total": 2251, "detail": "275 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 286, "total": 2251, "detail": "286 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 297, "total": 2251, "detail": "297 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 308, "total": 2251, "detail": "308 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 319, "total": 2251, "detail": "319 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 330, "total": 2251, "detail": "330 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 341, "total": 2251, "detail": "341 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 352, "total": 2251, "detail": "352 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 363, "total": 2251, "detail": "363 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 374, "total": 2251, "detail": "374 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 385, "total": 2251, "detail": "385 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 396, "total": 2251, "detail": "396 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 407, "total": 2251, "detail": "407 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 418, "total": 2251, "detail": "418 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 429, "total": 2251, "detail": "429 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 440, "total": 2251, "detail": "440 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 451, "total": 2251, "detail": "451 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 462, "total": 2251, "detail": "462 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 473, "total": 2251, "detail": "473 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 484, "total": 2251, "detail": "484 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 495, "total": 2251, "detail": "495 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 506, "total": 2251, "detail": "506 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 517, "total": 2251, "detail": "517 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 528, "total": 2251, "detail": "528 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 539, "total": 2251, "detail": "539 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 550, "total": 2251, "detail": "550 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 561, "total": 2251, "detail": "561 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 572, "total": 2251, "detail": "572 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 583, "total": 2251, "detail": "583 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 594, "total": 2251, "detail": "594 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 605, "total": 2251, "detail": "605 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 616, "total": 2251, "detail": "616 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 627, "total": 2251, "detail": "627 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 638, "total": 2251, "detail": "638 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 649, "total": 2251, "detail": "649 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 660, "total": 2251, "detail": "660 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 671, "total": 2251, "detail": "671 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 682, "total": 2251, "detail": "682 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 693, "total": 2251, "detail": "693 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 704, "total": 2251, "detail": "704 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 715, "total": 2251, "detail": "715 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 726, "total": 2251, "detail": "726 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 737, "total": 2251, "detail": "737 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 748, "total": 2251, "detail": "748 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 759, "total": 2251, "detail": "759 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 770, "total": 2251, "detail": "770 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 781, "total": 2251, "detail": "781 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 792, "total": 2251, "detail": "792 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 803, "total": 2251, "detail": "803 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 814, "total": 2251, "detail": "814 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 825, "total": 2251, "detail": "825 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 836, "total": 2251, "detail": "836 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 847, "total": 2251, "detail": "847 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 858, "total": 2251, "detail": "858 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 869, "total": 2251, "detail": "869 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 880, "total": 2251, "detail": "880 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 891, "total": 2251, "detail": "891 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 902, "total": 2251, "detail": "902 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 913, "total": 2251, "detail": "913 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 924, "total": 2251, "detail": "924 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 935, "total": 2251, "detail": "935 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 946, "total": 2251, "detail": "946 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 957, "total": 2251, "detail": "957 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 968, "total": 2251, "detail": "968 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 979, "total": 2251, "detail": "979 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 990, "total": 2251, "detail": "990 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1001, "total": 2251, "detail": "1,001 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1012, "total": 2251, "detail": "1,012 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1023, "total": 2251, "detail": "1,023 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1034, "total": 2251, "detail": "1,034 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1045, "total": 2251, "detail": "1,045 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1056, "total": 2251, "detail": "1,056 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1067, "total": 2251, "detail": "1,067 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1078, "total": 2251, "detail": "1,078 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1089, "total": 2251, "detail": "1,089 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1100, "total": 2251, "detail": "1,100 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1111, "total": 2251, "detail": "1,111 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1122, "total": 2251, "detail": "1,122 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1133, "total": 2251, "detail": "1,133 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1144, "total": 2251, "detail": "1,144 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1155, "total": 2251, "detail": "1,155 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1166, "total": 2251, "detail": "1,166 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1177, "total": 2251, "detail": "1,177 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1188, "total": 2251, "detail": "1,188 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1199, "total": 2251, "detail": "1,199 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1210, "total": 2251, "detail": "1,210 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1221, "total": 2251, "detail": "1,221 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1232, "total": 2251, "detail": "1,232 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1243, "total": 2251, "detail": "1,243 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1254, "total": 2251, "detail": "1,254 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1265, "total": 2251, "detail": "1,265 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1276, "total": 2251, "detail": "1,276 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1287, "total": 2251, "detail": "1,287 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1298, "total": 2251, "detail": "1,298 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1309, "total": 2251, "detail": "1,309 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1320, "total": 2251, "detail": "1,320 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1331, "total": 2251, "detail": "1,331 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1342, "total": 2251, "detail": "1,342 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1353, "total": 2251, "detail": "1,353 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1364, "total": 2251, "detail": "1,364 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1375, "total": 2251, "detail": "1,375 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1386, "total": 2251, "detail": "1,386 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1397, "total": 2251, "detail": "1,397 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1408, "total": 2251, "detail": "1,408 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1419, "total": 2251, "detail": "1,419 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1430, "total": 2251, "detail": "1,430 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1441, "total": 2251, "detail": "1,441 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1452, "total": 2251, "detail": "1,452 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1463, "total": 2251, "detail": "1,463 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1474, "total": 2251, "detail": "1,474 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1485, "total": 2251, "detail": "1,485 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1496, "total": 2251, "detail": "1,496 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1507, "total": 2251, "detail": "1,507 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1518, "total": 2251, "detail": "1,518 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1529, "total": 2251, "detail": "1,529 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1540, "total": 2251, "detail": "1,540 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1551, "total": 2251, "detail": "1,551 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1562, "total": 2251, "detail": "1,562 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1573, "total": 2251, "detail": "1,573 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1584, "total": 2251, "detail": "1,584 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1595, "total": 2251, "detail": "1,595 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1606, "total": 2251, "detail": "1,606 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1617, "total": 2251, "detail": "1,617 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1628, "total": 2251, "detail": "1,628 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1639, "total": 2251, "detail": "1,639 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1650, "total": 2251, "detail": "1,650 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1661, "total": 2251, "detail": "1,661 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1672, "total": 2251, "detail": "1,672 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1683, "total": 2251, "detail": "1,683 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1694, "total": 2251, "detail": "1,694 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1705, "total": 2251, "detail": "1,705 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1716, "total": 2251, "detail": "1,716 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1727, "total": 2251, "detail": "1,727 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1738, "total": 2251, "detail": "1,738 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1749, "total": 2251, "detail": "1,749 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1760, "total": 2251, "detail": "1,760 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1771, "total": 2251, "detail": "1,771 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1782, "total": 2251, "detail": "1,782 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1793, "total": 2251, "detail": "1,793 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1804, "total": 2251, "detail": "1,804 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1815, "total": 2251, "detail": "1,815 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1826, "total": 2251, "detail": "1,826 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1837, "total": 2251, "detail": "1,837 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1848, "total": 2251, "detail": "1,848 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1859, "total": 2251, "detail": "1,859 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1870, "total": 2251, "detail": "1,870 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1881, "total": 2251, "detail": "1,881 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1892, "total": 2251, "detail": "1,892 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1903, "total": 2251, "detail": "1,903 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1914, "total": 2251, "detail": "1,914 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1925, "total": 2251, "detail": "1,925 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1936, "total": 2251, "detail": "1,936 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1947, "total": 2251, "detail": "1,947 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1958, "total": 2251, "detail": "1,958 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1969, "total": 2251, "detail": "1,969 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1980, "total": 2251, "detail": "1,980 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1991, "total": 2251, "detail": "1,991 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2002, "total": 2251, "detail": "2,002 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2013, "total": 2251, "detail": "2,013 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2024, "total": 2251, "detail": "2,024 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2035, "total": 2251, "detail": "2,035 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2046, "total": 2251, "detail": "2,046 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2057, "total": 2251, "detail": "2,057 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2068, "total": 2251, "detail": "2,068 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2079, "total": 2251, "detail": "2,079 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2090, "total": 2251, "detail": "2,090 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2101, "total": 2251, "detail": "2,101 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2112, "total": 2251, "detail": "2,112 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2123, "total": 2251, "detail": "2,123 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2134, "total": 2251, "detail": "2,134 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2145, "total": 2251, "detail": "2,145 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2156, "total": 2251, "detail": "2,156 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2167, "total": 2251, "detail": "2,167 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2178, "total": 2251, "detail": "2,178 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2189, "total": 2251, "detail": "2,189 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2200, "total": 2251, "detail": "2,200 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2211, "total": 2251, "detail": "2,211 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2222, "total": 2251, "detail": "2,222 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2233, "total": 2251, "detail": "2,233 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 2244, "total": 2251, "detail": "2,244 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "track", "current": 1, "total": 1, "detail": "座標の保存完了"}
+FLY_PROGRESS {"stage": "analyze", "current": 0, "total": 12, "detail": "個体 1 / 12 を解析"}
+FLY_PROGRESS {"stage": "analyze", "current": 1, "total": 12, "detail": "個体 2 / 12 を解析"}
+FLY_PROGRESS {"stage": "analyze", "current": 2, "total": 12, "detail": "個体 3 / 12 を解析"}
+FLY_PROGRESS {"stage": "analyze", "current": 3, "total": 12, "detail": "個体 4 / 12 を解析"}
+FLY_PROGRESS {"stage": "analyze", "current": 4, "total": 12, "detail": "個体 5 / 12 を解析"}
+FLY_PROGRESS {"stage": "analyze", "current": 5, "total": 12, "detail": "個体 6 / 12 を解析"}
+FLY_PROGRESS {"stage": "analyze", "current": 6, "total": 12, "detail": "個体 7 / 12 を解析"}
+FLY_PROGRESS {"stage": "analyze", "current": 7, "total": 12, "detail": "個体 8 / 12 を解析"}
+FLY_PROGRESS {"stage": "analyze", "current": 8, "total": 12, "detail": "個体 9 / 12 を解析"}
+FLY_PROGRESS {"stage": "analyze", "current": 9, "total": 12, "detail": "個体 10 / 12 を解析"}
+FLY_PROGRESS {"stage": "analyze", "current": 10, "total": 12, "detail": "個体 11 / 12 を解析"}
+FLY_PROGRESS {"stage": "analyze", "current": 11, "total": 12, "detail": "個体 12 / 12 を解析"}
+FLY_PROGRESS {"stage": "analyze", "current": 1, "total": 1, "detail": "行動解析完了"}
+FLY_PROGRESS {"stage": "save", "current": 0, "total": 1, "detail": "時間集計を作成"}
+FLY_PROGRESS {"stage": "save", "current": 1, "total": 4, "detail": "移動量の図を作成"}
+FLY_PROGRESS {"stage": "save", "current": 2, "total": 4, "detail": "距離と移動停止の図を作成"}
+FLY_PROGRESS {"stage": "save", "current": 3, "total": 4, "detail": "前進後退の図を作成"}
+FLY_PROGRESS {"stage": "save", "current": 1, "total": 1, "detail": "集計と図の保存完了"}
+FLY_PROGRESS {"stage": "preview", "current": 0, "total": 1, "detail": "確認動画を作成"}
+FLY_PROGRESS {"stage": "preview", "current": 1, "total": 2251, "detail": "1 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 11, "total": 2251, "detail": "11 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 22, "total": 2251, "detail": "22 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 33, "total": 2251, "detail": "33 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 44, "total": 2251, "detail": "44 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 55, "total": 2251, "detail": "55 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 66, "total": 2251, "detail": "66 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 77, "total": 2251, "detail": "77 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 88, "total": 2251, "detail": "88 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 99, "total": 2251, "detail": "99 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 110, "total": 2251, "detail": "110 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 121, "total": 2251, "detail": "121 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 132, "total": 2251, "detail": "132 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 143, "total": 2251, "detail": "143 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 154, "total": 2251, "detail": "154 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 165, "total": 2251, "detail": "165 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 176, "total": 2251, "detail": "176 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 187, "total": 2251, "detail": "187 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 198, "total": 2251, "detail": "198 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 209, "total": 2251, "detail": "209 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 220, "total": 2251, "detail": "220 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 231, "total": 2251, "detail": "231 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 242, "total": 2251, "detail": "242 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 253, "total": 2251, "detail": "253 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 264, "total": 2251, "detail": "264 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 275, "total": 2251, "detail": "275 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 286, "total": 2251, "detail": "286 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 297, "total": 2251, "detail": "297 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 308, "total": 2251, "detail": "308 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 319, "total": 2251, "detail": "319 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 330, "total": 2251, "detail": "330 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 341, "total": 2251, "detail": "341 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 352, "total": 2251, "detail": "352 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 363, "total": 2251, "detail": "363 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 374, "total": 2251, "detail": "374 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 385, "total": 2251, "detail": "385 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 396, "total": 2251, "detail": "396 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 407, "total": 2251, "detail": "407 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 418, "total": 2251, "detail": "418 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 429, "total": 2251, "detail": "429 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 440, "total": 2251, "detail": "440 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 451, "total": 2251, "detail": "451 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 462, "total": 2251, "detail": "462 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 473, "total": 2251, "detail": "473 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 484, "total": 2251, "detail": "484 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 495, "total": 2251, "detail": "495 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 506, "total": 2251, "detail": "506 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 517, "total": 2251, "detail": "517 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 528, "total": 2251, "detail": "528 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 539, "total": 2251, "detail": "539 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 550, "total": 2251, "detail": "550 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 561, "total": 2251, "detail": "561 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 572, "total": 2251, "detail": "572 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 583, "total": 2251, "detail": "583 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 594, "total": 2251, "detail": "594 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 605, "total": 2251, "detail": "605 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 616, "total": 2251, "detail": "616 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 627, "total": 2251, "detail": "627 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 638, "total": 2251, "detail": "638 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 649, "total": 2251, "detail": "649 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 660, "total": 2251, "detail": "660 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 671, "total": 2251, "detail": "671 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 682, "total": 2251, "detail": "682 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 693, "total": 2251, "detail": "693 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 704, "total": 2251, "detail": "704 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 715, "total": 2251, "detail": "715 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 726, "total": 2251, "detail": "726 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 737, "total": 2251, "detail": "737 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 748, "total": 2251, "detail": "748 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 759, "total": 2251, "detail": "759 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 770, "total": 2251, "detail": "770 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 781, "total": 2251, "detail": "781 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 792, "total": 2251, "detail": "792 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 803, "total": 2251, "detail": "803 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 814, "total": 2251, "detail": "814 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 825, "total": 2251, "detail": "825 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 836, "total": 2251, "detail": "836 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 847, "total": 2251, "detail": "847 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 858, "total": 2251, "detail": "858 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 869, "total": 2251, "detail": "869 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 880, "total": 2251, "detail": "880 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 891, "total": 2251, "detail": "891 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 902, "total": 2251, "detail": "902 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 913, "total": 2251, "detail": "913 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 924, "total": 2251, "detail": "924 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 935, "total": 2251, "detail": "935 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 946, "total": 2251, "detail": "946 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 957, "total": 2251, "detail": "957 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 968, "total": 2251, "detail": "968 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 979, "total": 2251, "detail": "979 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 990, "total": 2251, "detail": "990 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1001, "total": 2251, "detail": "1,001 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1012, "total": 2251, "detail": "1,012 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1023, "total": 2251, "detail": "1,023 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1034, "total": 2251, "detail": "1,034 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1045, "total": 2251, "detail": "1,045 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1056, "total": 2251, "detail": "1,056 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1067, "total": 2251, "detail": "1,067 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1078, "total": 2251, "detail": "1,078 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1089, "total": 2251, "detail": "1,089 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1100, "total": 2251, "detail": "1,100 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1111, "total": 2251, "detail": "1,111 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1122, "total": 2251, "detail": "1,122 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1133, "total": 2251, "detail": "1,133 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1144, "total": 2251, "detail": "1,144 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1155, "total": 2251, "detail": "1,155 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1166, "total": 2251, "detail": "1,166 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1177, "total": 2251, "detail": "1,177 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1188, "total": 2251, "detail": "1,188 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1199, "total": 2251, "detail": "1,199 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1210, "total": 2251, "detail": "1,210 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1221, "total": 2251, "detail": "1,221 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1232, "total": 2251, "detail": "1,232 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1243, "total": 2251, "detail": "1,243 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1254, "total": 2251, "detail": "1,254 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1265, "total": 2251, "detail": "1,265 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1276, "total": 2251, "detail": "1,276 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1287, "total": 2251, "detail": "1,287 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1298, "total": 2251, "detail": "1,298 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1309, "total": 2251, "detail": "1,309 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1320, "total": 2251, "detail": "1,320 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1331, "total": 2251, "detail": "1,331 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1342, "total": 2251, "detail": "1,342 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1353, "total": 2251, "detail": "1,353 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1364, "total": 2251, "detail": "1,364 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1375, "total": 2251, "detail": "1,375 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1386, "total": 2251, "detail": "1,386 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1397, "total": 2251, "detail": "1,397 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1408, "total": 2251, "detail": "1,408 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1419, "total": 2251, "detail": "1,419 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1430, "total": 2251, "detail": "1,430 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1441, "total": 2251, "detail": "1,441 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1452, "total": 2251, "detail": "1,452 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1463, "total": 2251, "detail": "1,463 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1474, "total": 2251, "detail": "1,474 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1485, "total": 2251, "detail": "1,485 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1496, "total": 2251, "detail": "1,496 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1507, "total": 2251, "detail": "1,507 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1518, "total": 2251, "detail": "1,518 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1529, "total": 2251, "detail": "1,529 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1540, "total": 2251, "detail": "1,540 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1551, "total": 2251, "detail": "1,551 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1562, "total": 2251, "detail": "1,562 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1573, "total": 2251, "detail": "1,573 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1584, "total": 2251, "detail": "1,584 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1595, "total": 2251, "detail": "1,595 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1606, "total": 2251, "detail": "1,606 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1617, "total": 2251, "detail": "1,617 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1628, "total": 2251, "detail": "1,628 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1639, "total": 2251, "detail": "1,639 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1650, "total": 2251, "detail": "1,650 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1661, "total": 2251, "detail": "1,661 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1672, "total": 2251, "detail": "1,672 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1683, "total": 2251, "detail": "1,683 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1694, "total": 2251, "detail": "1,694 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1705, "total": 2251, "detail": "1,705 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1716, "total": 2251, "detail": "1,716 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1727, "total": 2251, "detail": "1,727 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1738, "total": 2251, "detail": "1,738 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1749, "total": 2251, "detail": "1,749 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1760, "total": 2251, "detail": "1,760 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1771, "total": 2251, "detail": "1,771 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1782, "total": 2251, "detail": "1,782 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1793, "total": 2251, "detail": "1,793 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1804, "total": 2251, "detail": "1,804 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1815, "total": 2251, "detail": "1,815 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1826, "total": 2251, "detail": "1,826 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1837, "total": 2251, "detail": "1,837 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1848, "total": 2251, "detail": "1,848 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1859, "total": 2251, "detail": "1,859 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1870, "total": 2251, "detail": "1,870 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1881, "total": 2251, "detail": "1,881 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1892, "total": 2251, "detail": "1,892 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1903, "total": 2251, "detail": "1,903 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1914, "total": 2251, "detail": "1,914 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1925, "total": 2251, "detail": "1,925 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1936, "total": 2251, "detail": "1,936 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1947, "total": 2251, "detail": "1,947 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1958, "total": 2251, "detail": "1,958 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1969, "total": 2251, "detail": "1,969 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1980, "total": 2251, "detail": "1,980 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1991, "total": 2251, "detail": "1,991 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2002, "total": 2251, "detail": "2,002 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2013, "total": 2251, "detail": "2,013 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2024, "total": 2251, "detail": "2,024 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2035, "total": 2251, "detail": "2,035 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2046, "total": 2251, "detail": "2,046 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2057, "total": 2251, "detail": "2,057 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2068, "total": 2251, "detail": "2,068 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2079, "total": 2251, "detail": "2,079 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2090, "total": 2251, "detail": "2,090 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2101, "total": 2251, "detail": "2,101 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2112, "total": 2251, "detail": "2,112 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2123, "total": 2251, "detail": "2,123 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2134, "total": 2251, "detail": "2,134 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2145, "total": 2251, "detail": "2,145 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2156, "total": 2251, "detail": "2,156 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2167, "total": 2251, "detail": "2,167 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2178, "total": 2251, "detail": "2,178 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2189, "total": 2251, "detail": "2,189 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2200, "total": 2251, "detail": "2,200 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2211, "total": 2251, "detail": "2,211 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2222, "total": 2251, "detail": "2,222 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2233, "total": 2251, "detail": "2,233 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 2244, "total": 2251, "detail": "2,244 / 2,251 フレーム"}
+FLY_PROGRESS {"stage": "preview", "current": 1, "total": 1, "detail": "解析結果の保存完了"}
+{
+  "expected_flies": 12,
+  "duration_s": 97.66896731345227,
+  "unit": "px",
+  "measured_distance": 4176.179756506353,
+  "valid_fly_seconds": 950.7314320441029,
+  "possible_fly_seconds": 1172.0276077614271,
+  "interval_coverage": 0.8111851851851852,
+  "distance_per_valid_fly_second": 4.392596705809372,
+  "all_seven_interval_fraction": 0.0,
+  "smoothing_window_frames": 3,
+  "warning": "Measured distance excludes missing/ambiguous intervals; not a complete-path estimate. Slots are not verified identities across segments. Movement thresholds are provisional."
+}

@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/Users/ruvi/repo_tex/Exp_3A/tuji/fly_activity/analyze_flies.py", line 622, in <module>
+    main()
+  File "/Users/ruvi/repo_tex/Exp_3A/tuji/fly_activity/analyze_flies.py", line 605, in main
+    result = analyze(tracks, config, args.out, anchors,appearance_cache,model)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ruvi/repo_tex/Exp_3A/tuji/fly_activity/analyze_flies.py", line 484, in analyze
+    save_period_statistics(out,compute_period_statistics(series,duration,unit))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/ruvi/repo_tex/Exp_3A/tuji/fly_activity/period_statistics.py", line 84, in compute_period_statistics
+    omnibus=permutation_test(samples,mean_difference_statistic,permutation_type="samples",
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: permutation_test() got an unexpected keyword argument 'rng'
