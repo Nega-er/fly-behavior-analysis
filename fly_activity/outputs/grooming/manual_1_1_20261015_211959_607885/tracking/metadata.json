@@ -1,0 +1,16 @@
+{
+  "fps": 23.037,
+  "frames_decoded": 2098,
+  "frames_reported": 2098,
+  "timing_source": "frame/FPS (constant-frame-rate assumption)",
+  "width": 1392,
+  "height": 1040,
+  "review_frames": 453,
+  "repeated_encoded_frames": 0,
+  "identity_method": "reserved_position_appearance",
+  "identity_reacquisitions": 54,
+  "reserved_missing_id_frames": 513,
+  "above_requested_population_fraction": 0.03527168732125834,
+  "stationary_recovery_frames": 0,
+  "source": "/Users/ibuki/Desktop/実験/hae/1_1.avi"
+}

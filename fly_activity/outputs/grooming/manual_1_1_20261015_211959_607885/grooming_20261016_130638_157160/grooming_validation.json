@@ -1,0 +1,47 @@
+{
+  "method": "aligned_difference_v2_unvalidated",
+  "trained": false,
+  "thresholds_fitted_to_labels": true,
+  "evaluation_independent": false,
+  "labeled_intervals": 719,
+  "positive_intervals": 326,
+  "negative_intervals": 393,
+  "unknown_predictions": 531,
+  "precision": 0.8342857142857143,
+  "recall": 0.44785276073619634,
+  "accuracy_including_unknown_as_error": 0.21279554937413073,
+  "prediction_coverage": 0.2614742698191933,
+  "confusion": [
+    {
+      "human": "non_grooming",
+      "predicted": "non_grooming",
+      "count": 7
+    },
+    {
+      "human": "non_grooming",
+      "predicted": "grooming",
+      "count": 29
+    },
+    {
+      "human": "non_grooming",
+      "predicted": "unknown",
+      "count": 357
+    },
+    {
+      "human": "grooming",
+      "predicted": "non_grooming",
+      "count": 6
+    },
+    {
+      "human": "grooming",
+      "predicted": "grooming",
+      "count": 146
+    },
+    {
+      "human": "grooming",
+      "predicted": "unknown",
+      "count": 174
+    }
+  ],
+  "note": "Unvalidated rule prototype revised using development labels; not an independent accuracy estimate. Unknown predictions count as misses; unlabeled/human Unknown are excluded. Head/body are not predicted."
+}
