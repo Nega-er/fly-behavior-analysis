@@ -1,0 +1,17 @@
+{
+  "fps": 23.037,
+  "frames_decoded": 2055,
+  "frames_reported": 2055,
+  "timing_source": "frame/FPS (constant-frame-rate assumption)",
+  "width": 1392,
+  "height": 1040,
+  "review_frames": 530,
+  "repeated_encoded_frames": 0,
+  "identity_method": "reserved_position_appearance",
+  "identity_reacquisitions": 82,
+  "flight_reacquisitions": 3,
+  "reserved_missing_id_frames": 556,
+  "above_requested_population_fraction": 0.0,
+  "stationary_recovery_frames": 0,
+  "source": "/Users/ruvi/Library/CloudStorage/GoogleDrive-nfrinta@gmail.com/マイドライブ/生物学科共有/辻先生_生物科学専門1/4班/6_female_1_2.avi"
+}
