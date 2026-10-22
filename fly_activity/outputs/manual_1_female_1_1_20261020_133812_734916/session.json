@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "video": "/Users/ibuki/Desktop/実験/hae/1_female_1_1.avi",
+  "tracks": "/Users/ibuki/ibuki_hae/fly-behavior-analysis/fly_activity/outputs/grooming/manual_1_female_1_1_20261016_170601_470097/tracking/tracks.csv",
+  "video_sha256": "0069cdd66bbf0a04a61a0f7acff92b8c61ab59f4182154e52bc6a2dc5fe81cbd",
+  "tracks_sha256": "12063070e77e037a079fe56f440dbb819481fcad4d6d28086624842c8d4a8062",
+  "slots": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+  ],
+  "interval_s": 1,
+  "labels": {},
+  "history": [],
+  "fps": 23.037,
+  "frames": 2025,
+  "width": 1392,
+  "height": 1040
+}
